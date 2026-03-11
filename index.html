@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CivicLens — Find Your Ballot</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --gray-900: #1a1a1a;
+    --gray-700: #3a3a3a;
+    --gray-500: #6a6a6a;
+    --gray-300: #c0c0c0;
+    --gray-100: #f0f0f0;
+    --gray-50: #f8f8f8;
+    --white: #ffffff;
+    --accent: #1a1a1a;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --radius: 16px;
+    --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--white);
+    color: var(--black);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 60px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .nav-logo {
+    font-family: var(--serif); font-size: 22px; letter-spacing: -0.5px;
+    color: var(--black); cursor: pointer;
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-size: 14px; font-weight: 500; color: var(--gray-500);
+    text-decoration: none; transition: color var(--transition);
+    cursor: pointer;
+  }
+  .nav-links a:hover { color: var(--black); }
+  .nav-cta {
+    padding: 8px 20px; background: var(--black); color: var(--white);
+    border: none; border-radius: 100px; font-family: var(--sans);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: opacity var(--transition);
+  }
+  .nav-cta:hover { opacity: 0.8; }
+
+  /* ── PAGES ── */
+  .page { display: none; min-height: 100vh; padding-top: 60px; }
+  .page.active { display: block; }
+
+  /* ────────────────────────────────────────────
+     PAGE 1 — LANDING
+  ──────────────────────────────────────────── */
+  #page-landing {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100vh; padding: 60px 24px;
+    background: var(--white);
+    position: relative; overflow: hidden;
+  }
+  #page-landing::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, #f0f0f0 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .landing-eyebrow {
+    font-size: 12px; font-weight: 500; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gray-500);
+    margin-bottom: 24px;
+  }
+  .landing-title {
+    font-family: var(--serif); font-size: clamp(52px, 7vw, 88px);
+    line-height: 1.0; letter-spacing: -2px;
+    text-align: center; max-width: 760px;
+    color: var(--black); margin-bottom: 24px;
+  }
+  .landing-title em { font-style: italic; color: var(--gray-500); }
+  .landing-sub {
+    font-size: 17px; font-weight: 300; color: var(--gray-500);
+    text-align: center; max-width: 440px;
+    line-height: 1.6; margin-bottom: 56px;
+  }
+
+  .input-group {
+    display: flex; flex-direction: column; gap: 12px;
+    width: 100%; max-width: 440px;
+  }
+  .input-row {
+    display: flex; gap: 10px;
+  }
+  .zip-input {
+    flex: 1; padding: 16px 20px;
+    border: 1.5px solid var(--gray-300); border-radius: 14px;
+    font-family: var(--sans); font-size: 16px; font-weight: 400;
+    color: var(--black); outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    background: var(--white);
+  }
+  .zip-input::placeholder { color: var(--gray-300); }
+  .zip-input:focus {
+    border-color: var(--black);
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.06);
+  }
+  .btn-primary {
+    padding: 16px 28px; background: var(--black); color: var(--white);
+    border: none; border-radius: 14px; font-family: var(--sans);
+    font-size: 15px; font-weight: 500; cursor: pointer; white-space: nowrap;
+    transition: opacity var(--transition), transform var(--transition);
+  }
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-ghost {
+    padding: 14px 20px; background: transparent; color: var(--gray-500);
+    border: 1.5px solid var(--gray-200); border-radius: 14px;
+    font-family: var(--sans); font-size: 14px; font-weight: 400;
+    cursor: pointer; transition: all var(--transition);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-ghost:hover { border-color: var(--gray-500); color: var(--black); }
+
+  .or-divider {
+    display: flex; align-items: center; gap: 16px;
+    color: var(--gray-300); font-size: 13px;
+  }
+  .or-divider::before, .or-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--gray-200);
+  }
+
+  .trust-row {
+    display: flex; gap: 32px; margin-top: 64px; opacity: 0.4;
+    font-size: 12px; font-weight: 500; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--gray-500);
+    align-items: center;
+  }
+
+  /* ────────────────────────────────────────────
+     PAGE 2 — YOUR ELECTIONS
+  ──────────────────────────────────────────── */
+  #page-elections { background: var(--white); }
+
+  .elections-hero {
+    padding: 72px 64px 48px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .elections-location-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--gray-500);
+    margin-bottom: 20px;
+  }
+  .loc-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--black); display: inline-block;
+  }
+  .elections-title {
+    font-family: var(--serif); font-size: 56px;
+    letter-spacing: -2px; line-height: 1.0;
+    color: var(--black); margin-bottom: 10px;
+    width: 420px;
+  }
+  .elections-subtitle {
+    font-size: 16px; color: var(--gray-500); font-weight: 300;
+    max-width: 440px; line-height: 1.5;
+  }
+
+  /* District carousel */
+  .carousel-section {
+    padding: 40px 64px;
+    border-bottom: 1px solid var(--gray-100);
+    position: relative;
+  }
+  .section-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gray-400);
+    margin-bottom: 20px;
+  }
+  .carousel-track {
+    display: flex; gap: 14px; overflow-x: auto;
+    scrollbar-width: none; scroll-behavior: smooth;
+    padding-bottom: 4px;
+  }
+  .carousel-track::-webkit-scrollbar { display: none; }
+
+  .district-chip {
+    flex-shrink: 0; padding: 14px 22px;
+    border: 1.5px solid var(--gray-200); border-radius: 100px;
+    cursor: pointer; transition: all var(--transition);
+    display: flex; flex-direction: column; gap: 2px;
+    background: var(--white); min-width: 160px;
+  }
+  .district-chip:hover, .district-chip.active {
+    border-color: var(--black); background: var(--black);
+  }
+  .district-chip:hover .chip-name,
+  .district-chip.active .chip-name { color: var(--white); }
+  .district-chip:hover .chip-sub,
+  .district-chip.active .chip-sub { color: rgba(255,255,255,0.5); }
+  .chip-name { font-size: 14px; font-weight: 500; color: var(--black); }
+  .chip-sub { font-size: 11px; color: var(--gray-400); }
+
+  .carousel-nav {
+    position: absolute; right: 64px; top: 40px;
+    display: flex; gap: 8px;
+  }
+  .cnav-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1.5px solid var(--gray-200); background: var(--white);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition);
+  }
+  .cnav-btn:hover { border-color: var(--black); background: var(--black); }
+  .cnav-btn:hover svg path { stroke: var(--white); }
+  .cnav-btn svg { width: 14px; height: 14px; }
+  .cnav-btn svg path { stroke: var(--gray-500); stroke-width: 2; fill: none; stroke-linecap: round; }
+
+  /* Explore Elections cards */
+  .explore-section { padding: 56px 64px; }
+  .section-header {
+    display: flex; align-items: flex-end;
+    justify-content: space-between; margin-bottom: 36px;
+  }
+  .section-h2 {
+    font-family: var(--serif); font-size: 34px;
+    letter-spacing: -1px; color: var(--black);
+    width: 420px;
+  }
+  .compare-tile {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 22px; border: 1.5px solid var(--gray-200);
+    border-radius: 14px; cursor: pointer;
+    transition: all var(--transition); background: var(--white);
+    max-width: 240px;
+  }
+  .compare-tile:hover { border-color: var(--black); }
+  .compare-icon {
+    width: 36px; height: 36px; background: var(--gray-100);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 18px;
+  }
+  .compare-tile-text .ct-title { font-size: 13px; font-weight: 600; color: var(--black); }
+  .compare-tile-text .ct-sub { font-size: 12px; color: var(--gray-500); }
+
+  .election-cards {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .election-card {
+    padding: 28px; border: 1.5px solid var(--gray-100); border-radius: var(--radius);
+    cursor: pointer; transition: all var(--transition);
+    display: flex; flex-direction: column; gap: 16px;
+    background: var(--white);
+  }
+  .election-card:hover { border-color: var(--black); box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
+  .ec-top { display: flex; align-items: flex-start; justify-content: space-between; }
+  .ec-icon {
+    width: 44px; height: 44px; background: var(--gray-50);
+    border-radius: 12px; display: flex; align-items: center;
+    justify-content: center; font-size: 22px;
+  }
+  .ec-count {
+    font-size: 12px; font-weight: 500; color: var(--gray-400);
+    background: var(--gray-50); padding: 4px 10px; border-radius: 100px;
+  }
+  .ec-title { font-family: var(--serif); font-size: 22px; letter-spacing: -0.5px; color: var(--black); }
+  .ec-offices { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+  .ec-arrow { font-size: 18px; color: var(--gray-300); align-self: flex-end; }
+
+  /* Featured banner */
+  .featured-section { padding: 0 64px 56px; }
+  .section-h3 {
+    font-family: var(--serif); font-size: 26px;
+    letter-spacing: -0.5px; color: var(--black);
+    margin-bottom: 24px;
+  }
+  .featured-banner {
+    background: var(--black); color: var(--white);
+    border-radius: var(--radius); padding: 40px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; transition: opacity var(--transition);
+    gap: 32px;
+  }
+  .featured-banner:hover { opacity: 0.92; }
+  .fb-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(255,255,255,0.4);
+    margin-bottom: 12px;
+  }
+  .fb-title { font-family: var(--serif); font-size: 30px; letter-spacing: -1px; margin-bottom: 10px; }
+  .fb-meta { font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 300; }
+  .fb-cta {
+    flex-shrink: 0; padding: 14px 26px;
+    border: 1.5px solid rgba(255,255,255,0.25); border-radius: 100px;
+    font-size: 14px; font-weight: 500; color: var(--white);
+    white-space: nowrap;
+  }
+
+  /* ────────────────────────────────────────────
+     PAGE 3 — CANDIDATE DETAIL
+  ──────────────────────────────────────────── */
+  #page-candidate { background: var(--white); }
+  .candidate-hero {
+    padding: 64px 64px 48px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex; gap: 48px; align-items: flex-start;
+  }
+  .candidate-avatar {
+    width: 96px; height: 96px; border-radius: 24px;
+    background: var(--gray-100); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; font-family: var(--serif);
+    color: var(--gray-400);
+  }
+  .candidate-meta { flex: 1; }
+  .candidate-name {
+    font-family: var(--serif); font-size: 48px;
+    letter-spacing: -2px; color: var(--black);
+    line-height: 1; margin-bottom: 8px;
+  }
+  .candidate-role { font-size: 15px; color: var(--gray-500); font-weight: 300; margin-bottom: 20px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    padding: 6px 14px; border: 1.5px solid var(--gray-200);
+    border-radius: 100px; font-size: 12px; font-weight: 500;
+    color: var(--gray-600);
+  }
+  .tag.dem { border-color: #1a1a1a; background: var(--gray-50); }
+
+  .candidate-body { display: grid; grid-template-columns: 1fr 320px; gap: 0; }
+
+  .timeline-section { padding: 48px 64px; border-right: 1px solid var(--gray-100); }
+  .timeline-section h3 {
+    font-family: var(--serif); font-size: 24px; letter-spacing: -0.5px;
+    margin-bottom: 32px;
+  }
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item {
+    display: flex; gap: 24px; position: relative;
+    padding-bottom: 32px;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; width: 60px; flex-shrink: 0; }
+  .tl-year { font-size: 12px; font-weight: 600; color: var(--gray-400); text-align: center; }
+  .tl-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--gray-300); margin: 6px 0;
+    flex-shrink: 0;
+  }
+  .tl-dot.highlight { background: var(--black); }
+  .tl-line { width: 1px; flex: 1; background: var(--gray-100); min-height: 20px; }
+  .tl-content {
+    flex: 1; padding: 14px 18px; border: 1.5px solid var(--gray-100);
+    border-radius: 12px; background: var(--white);
+  }
+  .tl-event { font-size: 14px; font-weight: 500; color: var(--black); margin-bottom: 4px; }
+  .tl-source { font-size: 12px; color: var(--gray-400); }
+  .tl-badge {
+    display: inline-block; padding: 3px 8px; border-radius: 100px;
+    font-size: 11px; font-weight: 500; margin-top: 6px;
+  }
+  .tl-badge.vote { background: #f0f0f0; color: #555; }
+  .tl-badge.funding { background: #fff0f0; color: #c44; }
+  .tl-badge.bill { background: #f0fff4; color: #3a8; }
+
+  .candidate-sidebar { padding: 48px 40px; }
+  .sidebar-section { margin-bottom: 36px; }
+  .sidebar-section h4 {
+    font-size: 11px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gray-400); margin-bottom: 16px;
+  }
+  .position-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .pos-icon { font-size: 16px; flex-shrink: 0; }
+  .pos-text { font-size: 13px; color: var(--black); line-height: 1.4; }
+
+  .funding-bar { margin-bottom: 12px; }
+  .fb-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+  .fb-label-text { color: var(--gray-600); }
+  .fb-amount { font-weight: 600; color: var(--black); }
+  .fb-track {
+    height: 4px; background: var(--gray-100); border-radius: 100px; overflow: hidden;
+  }
+  .fb-fill { height: 100%; background: var(--black); border-radius: 100px; }
+
+  .compare-btn {
+    width: 100%; padding: 14px; background: var(--black); color: var(--white);
+    border: none; border-radius: 12px; font-family: var(--sans);
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    transition: opacity var(--transition);
+  }
+  .compare-btn:hover { opacity: 0.8; }
+
+  /* ────────────────────────────────────────────
+     PAGE 4 — COMPARE
+  ──────────────────────────────────────────── */
+  #page-compare { background: var(--white); }
+  .compare-hero {
+    padding: 64px 64px 40px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .compare-title {
+    font-family: var(--serif); font-size: 48px; letter-spacing: -2px;
+    margin-bottom: 10px;
+  }
+  .compare-subtitle { font-size: 15px; color: var(--gray-500); font-weight: 300; }
+
+  .compare-grid { padding: 48px 64px; }
+  .compare-candidates {
+    display: grid; grid-template-columns: 200px 1fr 1fr; gap: 0;
+    border: 1.5px solid var(--gray-100); border-radius: var(--radius); overflow: hidden;
+  }
+  .cc-header {
+    background: var(--gray-50); padding: 24px 28px;
+    border-bottom: 1.5px solid var(--gray-100);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .cc-header.label-col { background: var(--white); }
+  .cc-cand-name { font-family: var(--serif); font-size: 20px; letter-spacing: -0.5px; }
+  .cc-cand-party {
+    font-size: 11px; font-weight: 500; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--gray-400);
+  }
+  .compare-row {
+    display: contents;
+  }
+  .compare-cell {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--gray-100);
+    border-right: 1px solid var(--gray-100);
+    font-size: 14px; color: var(--black); line-height: 1.5;
+  }
+  .compare-cell.category {
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--gray-400);
+    background: var(--white);
+    display: flex; align-items: center;
+  }
+  .compare-cell.support { color: #2a7a4a; }
+  .compare-cell.oppose { color: #c44; }
+  .compare-cell:last-child { border-right: none; }
+
+  /* ────────────────────────────────────────────
+     BACK NAV
+  ──────────────────────────────────────────── */
+  .back-nav {
+    padding: 16px 64px 0;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--gray-500); cursor: pointer;
+    transition: color var(--transition);
+  }
+  .back-nav:hover { color: var(--black); }
+
+  /* ────────────────────────────────────────────
+     ANIMATE IN
+  ──────────────────────────────────────────── */
+  .fade-up {
+    opacity: 0; transform: translateY(24px);
+    animation: fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .elections-hero, .carousel-section, .explore-section,
+    .featured-section { padding-left: 24px; padding-right: 24px; }
+    .elections-title { width: auto; font-size: 40px; }
+    .section-h2 { width: auto; }
+    .candidate-hero { padding: 32px 24px; flex-direction: column; gap: 24px; }
+    .candidate-name { font-size: 36px; }
+    .candidate-body { grid-template-columns: 1fr; }
+    .timeline-section, .candidate-sidebar { padding: 32px 24px; }
+    .compare-hero, .compare-grid { padding: 32px 24px; }
+    .back-nav { padding-left: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('landing')">CivicLens</div>
+  <div class="nav-links">
+    <a onclick="showPage('elections')">Elections</a>
+    <a onclick="showPage('candidate')">Candidates</a>
+    <a onclick="showPage('compare')">Compare</a>
+    <a>About</a>
+  </div>
+  <button class="nav-cta" onclick="showPage('elections')">Find My Ballot</button>
+</nav>
+
+<!-- ════════════════════════════════════════
+     PAGE 1 — LANDING
+════════════════════════════════════════ -->
+<div id="page-landing" class="page active">
+  <p class="landing-eyebrow fade-up">Your civic guide</p>
+  <h1 class="landing-title fade-up delay-1">Know exactly<br/><em>what you're voting on.</em></h1>
+  <p class="landing-sub fade-up delay-2">See only the races, districts, and candidates that actually apply to your address — nothing else.</p>
+
+  <div class="input-group fade-up delay-3">
+    <div class="input-row">
+      <input class="zip-input" id="zip-input" type="text" placeholder="Enter ZIP code or address…" maxlength="10" />
+      <button class="btn-primary" onclick="goToElections()">See My Ballot →</button>
+    </div>
+    <div class="or-divider">or</div>
+    <button class="btn-ghost" onclick="goToElections()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg>
+      Use my current location
+    </button>
+  </div>
+
+  <div class="trust-row fade-up delay-4">
+    <span>Google Civic API</span>
+    <span>·</span>
+    <span>Ballotpedia</span>
+    <span>·</span>
+    <span>OpenStates</span>
+    <span>·</span>
+    <span>VoteSmart</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 2 — YOUR ELECTIONS
+════════════════════════════════════════ -->
+<div id="page-elections" class="page">
+  <div class="back-nav" onclick="showPage('landing')">← Back</div>
+
+  <div class="elections-hero">
+    <div class="elections-location-tag">
+      <span class="loc-dot"></span>
+      Champaign County, Illinois · 61820
+    </div>
+    <h1 class="elections-title">Your Elections</h1>
+    <p class="elections-subtitle">6 races across 4 civic levels. Next election: November 4, 2025.</p>
+  </div>
+
+  <!-- District Carousel -->
+  <div class="carousel-section">
+    <div class="section-label">Your Civic Levels</div>
+    <div class="carousel-nav">
+      <button class="cnav-btn" onclick="scrollCarousel(-1)">
+        <svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5" /></svg>
+      </button>
+      <button class="cnav-btn" onclick="scrollCarousel(1)">
+        <svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5" /></svg>
+      </button>
+    </div>
+    <div class="carousel-track" id="carousel">
+      <div class="district-chip active" onclick="setActiveChip(this)">
+        <span class="chip-name">Federal</span>
+        <span class="chip-sub">3 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">State</span>
+        <span class="chip-sub">2 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">County</span>
+        <span class="chip-sub">4 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">City</span>
+        <span class="chip-sub">2 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">School Board</span>
+        <span class="chip-sub">1 race</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">Ballot Measures</span>
+        <span class="chip-sub">2 measures</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Explore Elections -->
+  <div class="explore-section">
+    <div class="section-header">
+      <h2 class="section-h2">Explore Elections</h2>
+      <div class="compare-tile" onclick="showPage('compare')">
+        <div class="compare-icon">⚖️</div>
+        <div class="compare-tile-text">
+          <div class="ct-title">Compare Candidates</div>
+          <div class="ct-sub">Side-by-side positions</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="election-cards">
+      <div class="election-card" onclick="showPage('candidate')">
+        <div class="ec-top">
+          <div class="ec-icon">🇺🇸</div>
+          <span class="ec-count">3 races</span>
+        </div>
+        <div class="ec-title">Federal</div>
+        <div class="ec-offices">President · U.S. House District 13 · U.S. Senate</div>
+        <div class="ec-arrow">→</div>
+      </div>
+      <div class="election-card" onclick="showPage('candidate')">
+        <div class="ec-top">
+          <div class="ec-icon">🏛️</div>
+          <span class="ec-count">2 races</span>
+        </div>
+        <div class="ec-title">State</div>
+        <div class="ec-offices">IL State Senate Dist. 52 · IL State House Dist. 103</div>
+        <div class="ec-arrow">→</div>
+      </div>
+      <div class="election-card" onclick="showPage('candidate')">
+        <div class="ec-top">
+          <div class="ec-icon">📍</div>
+          <span class="ec-count">4 races</span>
+        </div>
+        <div class="ec-title">County</div>
+        <div class="ec-offices">County Clerk · Sheriff · Treasurer · County Board</div>
+        <div class="ec-arrow">→</div>
+      </div>
+      <div class="election-card" onclick="showPage('candidate')">
+        <div class="ec-top">
+          <div class="ec-icon">🏫</div>
+          <span class="ec-count">1 race</span>
+        </div>
+        <div class="ec-title">School Board</div>
+        <div class="ec-offices">Unit 4 School Board · 2 open seats</div>
+        <div class="ec-arrow">→</div>
+      </div>
+      <div class="election-card" onclick="showPage('candidate')">
+        <div class="ec-top">
+          <div class="ec-icon">🗳️</div>
+          <span class="ec-count">2 measures</span>
+        </div>
+        <div class="ec-title">Ballot Measures</div>
+        <div class="ec-offices">Property Tax Levy · Infrastructure Bond</div>
+        <div class="ec-arrow">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Take a Closer Look -->
+  <div class="featured-section">
+    <h3 class="section-h3">Take a Closer Look</h3>
+    <div class="featured-banner" onclick="showPage('candidate')">
+      <div>
+        <div class="fb-label">Featured Race</div>
+        <div class="fb-title">Champaign Unit 4 School Board</div>
+        <div class="fb-meta">4 candidates · 2 open seats · Election Nov 4</div>
+      </div>
+      <div class="fb-cta">Explore Candidates →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 3 — CANDIDATE
+════════════════════════════════════════ -->
+<div id="page-candidate" class="page">
+  <div class="back-nav" onclick="showPage('elections')">← Your Elections</div>
+
+  <div class="candidate-hero">
+    <div class="candidate-avatar">JS</div>
+    <div class="candidate-meta">
+      <h1 class="candidate-name">Jane Smith</h1>
+      <p class="candidate-role">Current: State Senator · Running for U.S. House District 13</p>
+      <div class="tag-row">
+        <span class="tag dem">Democrat</span>
+        <span class="tag">Healthcare</span>
+        <span class="tag">Energy</span>
+        <span class="tag">Education</span>
+        <span class="tag">Housing</span>
+      </div>
+    </div>
+    <button class="compare-btn" style="max-width:180px; align-self:flex-start;" onclick="showPage('compare')">Compare →</button>
+  </div>
+
+  <div class="candidate-body">
+    <!-- Timeline -->
+    <div class="timeline-section">
+      <h3>Record &amp; Actions</h3>
+      <div class="timeline">
+
+        <div class="tl-item">
+          <div class="tl-left">
+            <span class="tl-year">2021</span>
+            <div class="tl-dot highlight"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-event">Voted YES on Infrastructure Investment and Jobs Act</div>
+            <div class="tl-source">Source: Congress.gov — Roll Call Vote #369</div>
+            <span class="tl-badge vote">Vote</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-left">
+            <span class="tl-year">2022</span>
+            <div class="tl-dot"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-event">Received $300,000 from energy industry PACs</div>
+            <div class="tl-source">Source: OpenSecrets.org — FEC Filing Q2 2022</div>
+            <span class="tl-badge funding">Funding</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-left">
+            <span class="tl-year">2022</span>
+            <div class="tl-dot highlight"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-event">Co-sponsored Inflation Reduction Act — climate provisions</div>
+            <div class="tl-source">Source: Congress.gov — S. 3684</div>
+            <span class="tl-badge bill">Bill</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-left">
+            <span class="tl-year">2023</span>
+            <div class="tl-dot highlight"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-event">Introduced Illinois Housing Affordability Act</div>
+            <div class="tl-source">Source: Illinois General Assembly — HB 4201</div>
+            <span class="tl-badge bill">Bill</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-left">
+            <span class="tl-year">2024</span>
+            <div class="tl-dot"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-event">Voted NO on budget amendment cutting education funding</div>
+            <div class="tl-source">Source: Illinois General Assembly — Roll Call #182</div>
+            <span class="tl-badge vote">Vote</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="candidate-sidebar">
+      <div class="sidebar-section">
+        <h4>Key Positions</h4>
+        <div class="position-item">
+          <span class="pos-icon">🏥</span>
+          <span class="pos-text">Supports public option healthcare expansion</span>
+        </div>
+        <div class="position-item">
+          <span class="pos-icon">☀️</span>
+          <span class="pos-text">Supports renewable energy investment</span>
+        </div>
+        <div class="position-item">
+          <span class="pos-icon">🎓</span>
+          <span class="pos-text">Supports tuition relief for state schools</span>
+        </div>
+        <div class="position-item">
+          <span class="pos-icon">🏠</span>
+          <span class="pos-text">Supports affordable housing legislation</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Top Funding Sources</h4>
+        <div class="funding-bar">
+          <div class="fb-row">
+            <span class="fb-label-text">Teachers' Union</span>
+            <span class="fb-amount">$180k</span>
+          </div>
+          <div class="fb-track"><div class="fb-fill" style="width:90%"></div></div>
+        </div>
+        <div class="funding-bar">
+          <div class="fb-row">
+            <span class="fb-label-text">Energy Industry PAC</span>
+            <span class="fb-amount">$300k</span>
+          </div>
+          <div class="fb-track"><div class="fb-fill" style="width:100%"></div></div>
+        </div>
+        <div class="funding-bar">
+          <div class="fb-row">
+            <span class="fb-label-text">Small Donors (&lt;$200)</span>
+            <span class="fb-amount">$95k</span>
+          </div>
+          <div class="fb-track"><div class="fb-fill" style="width:48%"></div></div>
+        </div>
+        <p style="font-size:11px;color:var(--gray-400);margin-top:8px;">Source: OpenSecrets.org · FEC 2024</p>
+      </div>
+
+      <button class="compare-btn" onclick="showPage('compare')">Compare with Opponent →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 4 — COMPARE
+════════════════════════════════════════ -->
+<div id="page-compare" class="page">
+  <div class="back-nav" onclick="showPage('elections')">← Your Elections</div>
+
+  <div class="compare-hero">
+    <h1 class="compare-title">Compare Candidates</h1>
+    <p class="compare-subtitle">U.S. House — District 13 · Illinois</p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-candidates">
+
+      <!-- Header row -->
+      <div class="cc-header label-col"></div>
+      <div class="cc-header">
+        <div class="cc-cand-name">Jane Smith</div>
+        <div class="cc-cand-party">Democrat</div>
+      </div>
+      <div class="cc-header">
+        <div class="cc-cand-name">Mark Davis</div>
+        <div class="cc-cand-party">Republican</div>
+      </div>
+
+      <!-- Healthcare -->
+      <div class="compare-row">
+        <div class="compare-cell category">Healthcare</div>
+        <div class="compare-cell support">Supports public option and Medicare expansion</div>
+        <div class="compare-cell oppose">Opposes public option; supports private market solutions</div>
+      </div>
+
+      <!-- Energy -->
+      <div class="compare-row">
+        <div class="compare-cell category">Energy</div>
+        <div class="compare-cell support">Supports renewable investment; phased fossil fuel reduction</div>
+        <div class="compare-cell oppose">Supports domestic oil & gas expansion; opposes carbon tax</div>
+      </div>
+
+      <!-- Education -->
+      <div class="compare-row">
+        <div class="compare-cell category">Education</div>
+        <div class="compare-cell support">Supports tuition relief and increased Pell Grants</div>
+        <div class="compare-cell">Supports school choice and vocational alternatives</div>
+      </div>
+
+      <!-- Taxes -->
+      <div class="compare-row">
+        <div class="compare-cell category">Taxes</div>
+        <div class="compare-cell support">Raise corporate tax rate to 28%; maintain middle-class cuts</div>
+        <div class="compare-cell oppose">Extend Trump-era cuts; reduce corporate rate further</div>
+      </div>
+
+      <!-- Housing -->
+      <div class="compare-row">
+        <div class="compare-cell category">Housing</div>
+        <div class="compare-cell support">Supports federal affordable housing construction grants</div>
+        <div class="compare-cell">Supports zoning deregulation at local level</div>
+      </div>
+
+      <!-- Top Funding -->
+      <div class="compare-row">
+        <div class="compare-cell category">Top Donor</div>
+        <div class="compare-cell">Energy Industry PAC — $300k</div>
+        <div class="compare-cell">Real Estate PAC — $420k</div>
+      </div>
+
+    </div>
+    <p style="font-size:12px;color:var(--gray-400);margin-top:16px;">
+      Sources: Ballotpedia · VoteSmart · OpenSecrets.org · Congress.gov
+    </p>
+  </div>
+</div>
+
+<script>
+  const pages = ['landing','elections','candidate','compare'];
+
+  function showPage(id) {
+    pages.forEach(p => {
+      const el = document.getElementById('page-' + p);
+      el.classList.remove('active');
+    });
+    const target = document.getElementById('page-' + id);
+    target.classList.add('active');
+    // Re-trigger animations
+    target.querySelectorAll('.fade-up').forEach(el => {
+      el.style.animation = 'none';
+      el.offsetHeight; // reflow
+      el.style.animation = '';
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goToElections() {
+    showPage('elections');
+  }
+
+  function setActiveChip(el) {
+    document.querySelectorAll('.district-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function scrollCarousel(dir) {
+    const track = document.getElementById('carousel');
+    track.scrollBy({ left: dir * 200, behavior: 'smooth' });
+  }
+
+  // Enter key on zip input
+  document.getElementById('zip-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') goToElections();
+  });
+</script>
+</body>
+</html>
