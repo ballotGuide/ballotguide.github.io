@@ -7,10 +7,11 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
   <style>
+    /* ── LANDING HERO ── */
     #page-landing {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      min-height: 100vh; padding: 80px 24px 40px;
+      min-height: 100vh; padding: 80px 24px 64px;
       position: relative; overflow: hidden;
     }
     #page-landing::before {
@@ -67,12 +68,169 @@
       align-items: center; flex-wrap: wrap; justify-content: center;
       position: relative; z-index: 1;
     }
+    .scroll-hint {
+      position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--gray-400); opacity: 0.6; z-index: 1;
+      animation: hintBob 2s ease-in-out infinite;
+    }
+    .scroll-hint svg { width: 14px; height: 14px; }
+    @keyframes hintBob {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(5px); }
+    }
     .error-message {
       font-size: 13px; color: #c44; padding: 10px 14px;
       background: #fff0f0; border-radius: 10px;
       border: 1px solid #f5c6c6;
     }
     .btn-ghost:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── HAPPENING NOW SECTION ── */
+    #happening-now {
+      padding: 80px 64px;
+      border-top: 1px solid var(--gray-100);
+      background: var(--white);
+      overflow: hidden;
+    }
+
+    .hn-header {
+      display: flex; align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+    .hn-header-left {}
+    .hn-eyebrow {
+      font-size: 11px; font-weight: 500; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gray-400);
+      margin-bottom: 10px;
+    }
+    .hn-title {
+      font-family: var(--serif); font-size: 36px;
+      letter-spacing: -1px; color: var(--black);
+      line-height: 1; margin-bottom: 8px;
+    }
+    .hn-subtitle {
+      font-size: 14px; color: var(--gray-500);
+      font-weight: 300; line-height: 1.5;
+    }
+    .hn-nav {
+      display: flex; gap: 8px; flex-shrink: 0;
+    }
+    .hn-nav-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1.5px solid var(--gray-200); background: var(--white);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition); flex-shrink: 0;
+    }
+    .hn-nav-btn:hover { border-color: var(--black); background: var(--black); }
+    .hn-nav-btn:hover svg path { stroke: var(--white); }
+    .hn-nav-btn svg { width: 14px; height: 14px; pointer-events: none; }
+    .hn-nav-btn svg path { stroke: var(--gray-500); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── CAROUSEL TRACK ── */
+    .hn-track-wrap { overflow: hidden; position: relative; }
+    .hn-track {
+      display: flex; gap: 20px;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    /* ── SIGNAL CARD ── */
+    .signal-card {
+      flex-shrink: 0;
+      width: 320px;
+      padding: 32px 30px 28px;
+      border: 1.5px solid var(--gray-100);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+      background: var(--white);
+      display: flex; flex-direction: column; gap: 14px;
+      position: relative;
+    }
+    .signal-card:hover {
+      border-color: var(--black);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.09);
+      transform: translateY(-3px);
+    }
+    .signal-card:hover .sc-cta { opacity: 1; }
+
+    .sc-top {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sc-status {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 100px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+    }
+    .sc-status.live {
+      background: #0a0a0a; color: #fff;
+    }
+    .sc-status.live::before {
+      content: '';
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #fff;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+    .sc-status.upcoming {
+      background: var(--gray-100); color: var(--gray-600);
+    }
+    .sc-status.recent {
+      background: var(--gray-50); color: var(--gray-500);
+      border: 1px solid var(--gray-200);
+    }
+    .sc-date {
+      font-size: 11px; color: var(--gray-400); font-weight: 500;
+    }
+
+    .sc-title {
+      font-family: var(--serif); font-size: 21px;
+      letter-spacing: -0.5px; color: var(--black);
+      line-height: 1.15;
+    }
+    .sc-context {
+      font-size: 13px; color: var(--gray-500);
+      line-height: 1.55; font-weight: 300;
+    }
+
+    .sc-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 8px; border-top: 1px solid var(--gray-100);
+      margin-top: auto;
+    }
+    .sc-scope {
+      font-size: 11px; font-weight: 500; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--gray-400);
+    }
+    .sc-cta {
+      font-size: 12px; color: var(--gray-400);
+      opacity: 0; transition: opacity var(--transition);
+    }
+
+    /* ── PROGRESS DOTS ── */
+    .hn-dots {
+      display: flex; gap: 6px; justify-content: center;
+      margin-top: 28px;
+    }
+    .hn-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gray-200);
+      transition: background var(--transition), transform var(--transition);
+      cursor: pointer;
+    }
+    .hn-dot.active { background: var(--black); transform: scale(1.3); }
+
+    @media (max-width: 768px) {
+      #happening-now { padding: 56px 24px; }
+      .hn-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .signal-card { width: 280px; }
+    }
   </style>
 </head>
 <body>
@@ -87,6 +245,7 @@
   <a class="nav-cta" href="elections.html">Find My Ballot</a>
 </nav>
 
+<!-- ── HERO ── -->
 <div id="page-landing">
   <p class="landing-eyebrow fade-up">Your civic guide</p>
   <h1 class="landing-title fade-up delay-1">Know exactly<br/><em>what you're voting on.</em></h1>
@@ -119,14 +278,122 @@
     <span>·</span>
     <span>VoteSmart</span>
   </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <svg viewBox="0 0 14 14" fill="none"><path d="M2 4l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
 </div>
+
+<!-- ── HAPPENING NOW ── -->
+<section id="happening-now">
+  <div class="hn-header">
+    <div class="hn-header-left">
+      <p class="hn-eyebrow">United States · 2026</p>
+      <h2 class="hn-title">Happening Now</h2>
+      <p class="hn-subtitle">Key shifts shaping elections across the U.S.</p>
+    </div>
+    <div class="hn-nav">
+      <button class="hn-nav-btn" id="hn-prev" aria-label="Previous">
+        <svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg>
+      </button>
+      <button class="hn-nav-btn" id="hn-next" aria-label="Next">
+        <svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="hn-track-wrap">
+    <div class="hn-track" id="hn-track">
+
+      <!-- Card 1 -->
+      <div class="signal-card" onclick="focusZip()">
+        <div class="sc-top">
+          <span class="sc-status upcoming">Upcoming</span>
+          <span class="sc-date">Nov 3, 2026</span>
+        </div>
+        <div class="sc-title">House control is three seats away</div>
+        <div class="sc-context">Democrats need a net gain of just 3 seats to flip the House. Republicans currently hold a 220–215 majority — the thinnest margin in decades.</div>
+        <div class="sc-footer">
+          <span class="sc-scope">U.S. House · All 435 Seats</span>
+          <span class="sc-cta">Enter your ZIP →</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="signal-card" onclick="focusZip()">
+        <div class="sc-top">
+          <span class="sc-status upcoming">Upcoming</span>
+          <span class="sc-date">Nov 3, 2026</span>
+        </div>
+        <div class="sc-title">12 Senate seats are in play</div>
+        <div class="sc-context">Ballotpedia identifies 12 battleground Senate seats this cycle. Republicans are defending one seat in a state Kamala Harris won — Maine.</div>
+        <div class="sc-footer">
+          <span class="sc-scope">U.S. Senate · 35 Seats Up</span>
+          <span class="sc-cta">Enter your ZIP →</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="signal-card" onclick="focusZip()">
+        <div class="sc-top">
+          <span class="sc-status recent">Recent</span>
+          <span class="sc-date">Nov 2025</span>
+        </div>
+        <div class="sc-title">Democrats flipped two governorships</div>
+        <div class="sc-context">Abigail Spanberger in Virginia and Mikie Sherrill in New Jersey both won by wider-than-expected margins, signaling early headwinds for Republicans.</div>
+        <div class="sc-footer">
+          <span class="sc-scope">Governors · State Power</span>
+          <span class="sc-cta">Enter your ZIP →</span>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="signal-card" onclick="focusZip()">
+        <div class="sc-top">
+          <span class="sc-status recent">Recent</span>
+          <span class="sc-date">Early 2026</span>
+        </div>
+        <div class="sc-title">A record wave of retirements</div>
+        <div class="sc-context">Over 56 sitting members of Congress — more than 10% — are not running for reelection. 25 of them are Republicans, often a leading indicator of a coming wave.</div>
+        <div class="sc-footer">
+          <span class="sc-scope">Congress · Open Seats</span>
+          <span class="sc-cta">Enter your ZIP →</span>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="signal-card" onclick="focusZip()">
+        <div class="sc-top">
+          <span class="sc-status live">Live</span>
+          <span class="sc-date">Ongoing</span>
+        </div>
+        <div class="sc-title">Congressional maps are being redrawn mid-cycle</div>
+        <div class="sc-context">Texas, North Carolina, Missouri, and Ohio have redrawn district maps between elections — a rare move that could affect dozens of competitive races.</div>
+        <div class="sc-footer">
+          <span class="sc-scope">Redistricting · 4 States</span>
+          <span class="sc-cta">Enter your ZIP →</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="hn-dots" id="hn-dots"></div>
+</section>
 
 <script src="js/main.js"></script>
 <script>
+  /* ── ZIP / Location logic ── */
   const searchBtn   = document.getElementById('search-btn');
   const locationBtn = document.getElementById('location-btn');
   const zipInput    = document.getElementById('zip-input');
   const errorBox    = document.getElementById('error-box');
+
+  function focusZip() {
+    zipInput.focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   function goToElections(address) {
     if (!address || address.trim().length < 3) {
@@ -141,25 +408,80 @@
   }
 
   searchBtn.addEventListener('click', () => goToElections(zipInput.value));
-
-  zipInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') goToElections(zipInput.value);
-  });
+  zipInput.addEventListener('keydown', e => { if (e.key === 'Enter') goToElections(zipInput.value); });
 
   locationBtn.addEventListener('click', async () => {
     locationBtn.innerHTML = '⏳ Getting location…';
-    locationBtn.disabled = true;
-    errorBox.innerHTML = '';
+    locationBtn.disabled  = true;
+    errorBox.innerHTML    = '';
     try {
       const { lat, lng } = await getLocation();
-      const address = await reverseGeocode(lat, lng);
+      const address      = await reverseGeocode(lat, lng);
       goToElections(address || `${lat.toFixed(4)}, ${lng.toFixed(4)}`);
-    } catch (err) {
+    } catch {
       errorBox.innerHTML = '<div class="error-message">Could not get location. Please enter your address manually.</div>';
       locationBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg> Use my current location`;
       locationBtn.disabled = false;
     }
   });
+
+  /* ── Happening Now Carousel ── */
+  (function() {
+    const track    = document.getElementById('hn-track');
+    const dotsWrap = document.getElementById('hn-dots');
+    const cards    = Array.from(track.querySelectorAll('.signal-card'));
+    const CARD_W   = () => cards[0].offsetWidth + 20; // card + gap
+    const VISIBLE  = () => Math.floor(track.parentElement.offsetWidth / CARD_W());
+
+    let current    = 0;
+    let autoTimer  = null;
+    const total    = cards.length;
+
+    // Build dots
+    cards.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'hn-dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(d);
+    });
+
+    function updateDots() {
+      dotsWrap.querySelectorAll('.hn-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+    }
+
+    function goTo(index) {
+      const max = total - VISIBLE();
+      current = Math.max(0, Math.min(index, Math.max(max, 0)));
+      track.style.transform = `translateX(-${current * CARD_W()}px)`;
+      updateDots();
+    }
+
+    document.getElementById('hn-prev').addEventListener('click', () => {
+      resetAuto();
+      goTo(current <= 0 ? total - 1 : current - 1);
+    });
+
+    document.getElementById('hn-next').addEventListener('click', () => {
+      resetAuto();
+      goTo(current >= total - 1 ? 0 : current + 1);
+    });
+
+    function resetAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => {
+        goTo(current >= total - 1 ? 0 : current + 1);
+      }, 5000);
+    }
+
+    // Pause on hover
+    track.addEventListener('mouseenter', () => clearInterval(autoTimer));
+    track.addEventListener('mouseleave', resetAuto);
+
+    resetAuto();
+    window.addEventListener('resize', () => goTo(current));
+  })();
 </script>
 </body>
 </html>
