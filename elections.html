@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BallotGuide — Your Elections</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { padding-top: 60px; }
+
+    /* ── HERO ── */
+    .elections-hero {
+      padding: 72px 64px 48px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .elections-location-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--gray-500);
+      margin-bottom: 20px;
+    }
+    .loc-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--black); display: inline-block;
+    }
+    .elections-title {
+      font-family: var(--serif); font-size: 56px;
+      letter-spacing: -2px; line-height: 1.0;
+      color: var(--black); margin-bottom: 10px;
+      width: 420px;
+    }
+    .elections-subtitle {
+      font-size: 16px; color: var(--gray-500); font-weight: 300;
+      max-width: 440px; line-height: 1.5;
+    }
+
+    /* ── CAROUSEL ── */
+    .carousel-section {
+      padding: 40px 64px;
+      border-bottom: 1px solid var(--gray-100);
+      position: relative;
+    }
+    .carousel-track {
+      display: flex; gap: 14px; overflow-x: auto;
+      scrollbar-width: none; scroll-behavior: smooth;
+      padding-bottom: 4px;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+
+    /* ── EXPLORE SECTION ── */
+    .explore-section { padding: 56px 64px; }
+    .section-header {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; margin-bottom: 36px;
+    }
+    .section-h2 {
+      font-family: var(--serif); font-size: 34px;
+      letter-spacing: -1px; color: var(--black);
+      width: 420px;
+    }
+
+    /* ── FEATURED / TAKE A CLOSER LOOK ── */
+    .featured-section { padding: 0 64px 56px; }
+    .section-h3 {
+      font-family: var(--serif); font-size: 26px;
+      letter-spacing: -0.5px; color: var(--black);
+      margin-bottom: 24px;
+    }
+
+    /* ── WHY VOTE ── */
+    .why-vote-section {
+      padding: 56px 64px;
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-100);
+    }
+    .section-h4 {
+      font-family: var(--serif); font-size: 22px;
+      letter-spacing: -0.5px; color: var(--black);
+      margin-bottom: 24px;
+    }
+    .why-cards {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .why-card {
+      padding: 24px; background: var(--white);
+      border: 1.5px solid var(--gray-100); border-radius: var(--radius);
+    }
+    .why-card .wc-icon { font-size: 28px; margin-bottom: 12px; }
+    .why-card .wc-title { font-size: 15px; font-weight: 600; color: var(--black); margin-bottom: 6px; }
+    .why-card .wc-text { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+
+    /* ── VOTING ESSENTIALS ── */
+    .essentials-section { padding: 56px 64px; }
+    .section-h5 {
+      font-family: var(--serif); font-size: 20px;
+      letter-spacing: -0.3px; color: var(--black);
+      margin-bottom: 24px;
+    }
+    .essentials-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .essential-item {
+      padding: 18px 20px; border: 1.5px solid var(--gray-100);
+      border-radius: 12px; display: flex; align-items: center;
+      gap: 12px; cursor: pointer; transition: all var(--transition);
+      background: var(--white); text-decoration: none; color: inherit;
+    }
+    .essential-item:hover { border-color: var(--black); }
+    .essential-item .ei-icon { font-size: 20px; flex-shrink: 0; }
+    .essential-item .ei-text { font-size: 13px; font-weight: 500; color: var(--black); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="index.html">BallotGuide</a>
+    <div class="nav-links">
+      <a href="elections.html">Elections</a>
+      <a href="candidate.html">Candidates</a>
+      <a href="compare.html">Compare</a>
+      <a href="#">About</a>
+    </div>
+    <a class="nav-cta" href="index.html">Find My Ballot</a>
+  </nav>
+
+  <a class="back-nav" href="index.html">← Back</a>
+
+  <!-- HERO -->
+  <div class="elections-hero">
+    <div class="elections-location-tag">
+      <span class="loc-dot"></span>
+      Champaign County, Illinois · 61820
+    </div>
+    <h1 class="elections-title">Your Elections</h1>
+    <p class="elections-subtitle">6 races across 4 civic levels. Next election: November 4, 2025.</p>
+  </div>
+
+  <!-- DISTRICT CAROUSEL -->
+  <div class="carousel-section">
+    <div class="section-label">Your Civic Levels</div>
+    <div class="carousel-nav">
+      <button class="cnav-btn" onclick="scrollCarousel(-1)">
+        <svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5" /></svg>
+      </button>
+      <button class="cnav-btn" onclick="scrollCarousel(1)">
+        <svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5" /></svg>
+      </button>
+    </div>
+    <div class="carousel-track" id="carousel">
+      <div class="district-chip active" onclick="setActiveChip(this)">
+        <span class="chip-name">Federal</span>
+        <span class="chip-sub">3 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">State</span>
+        <span class="chip-sub">2 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">County</span>
+        <span class="chip-sub">4 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">City</span>
+        <span class="chip-sub">2 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">School Board</span>
+        <span class="chip-sub">1 race</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">Ballot Measures</span>
+        <span class="chip-sub">2 measures</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLORE ELECTIONS -->
+  <div class="explore-section">
+    <div class="section-header">
+      <h2 class="section-h2">Explore Elections</h2>
+      <a class="compare-tile" href="compare.html">
+        <div class="compare-icon">⚖️</div>
+        <div class="compare-tile-text">
+          <div class="ct-title">Compare Candidates</div>
+          <div class="ct-sub">Side-by-side positions</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="election-cards">
+      <a class="election-card" href="candidate.html">
+        <div class="ec-top">
+          <div class="ec-icon">🇺🇸</div>
+          <span class="ec-count">3 races</span>
+        </div>
+        <div class="ec-title">Federal</div>
+        <div class="ec-offices">President · U.S. House District 13 · U.S. Senate</div>
+        <div class="ec-arrow">→</div>
+      </a>
+      <a class="election-card" href="candidate.html">
+        <div class="ec-top">
+          <div class="ec-icon">🏛️</div>
+          <span class="ec-count">2 races</span>
+        </div>
+        <div class="ec-title">State</div>
+        <div class="ec-offices">IL State Senate Dist. 52 · IL State House Dist. 103</div>
+        <div class="ec-arrow">→</div>
+      </a>
+      <a class="election-card" href="candidate.html">
+        <div class="ec-top">
+          <div class="ec-icon">📍</div>
+          <span class="ec-count">4 races</span>
+        </div>
+        <div class="ec-title">County</div>
+        <div class="ec-offices">County Clerk · Sheriff · Treasurer · County Board</div>
+        <div class="ec-arrow">→</div>
+      </a>
+      <a class="election-card" href="candidate.html">
+        <div class="ec-top">
+          <div class="ec-icon">🏫</div>
+          <span class="ec-count">1 race</span>
+        </div>
+        <div class="ec-title">School Board</div>
+        <div class="ec-offices">Unit 4 School Board · 2 open seats</div>
+        <div class="ec-arrow">→</div>
+      </a>
+      <a class="election-card" href="candidate.html">
+        <div class="ec-top">
+          <div class="ec-icon">🗳️</div>
+          <span class="ec-count">2 measures</span>
+        </div>
+        <div class="ec-title">Ballot Measures</div>
+        <div class="ec-offices">Property Tax Levy · Infrastructure Bond</div>
+        <div class="ec-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- TAKE A CLOSER LOOK -->
+  <div class="featured-section">
+    <h3 class="section-h3">Take a Closer Look</h3>
+    <a class="featured-banner" href="candidate.html">
+      <div>
+        <div class="fb-label">Featured Race</div>
+        <div class="fb-title">Champaign Unit 4 School Board</div>
+        <div class="fb-meta">4 candidates · 2 open seats · Election Nov 4</div>
+      </div>
+      <div class="fb-cta">Explore Candidates →</div>
+    </a>
+  </div>
+
+  <!-- WHY SHOULD YOU VOTE -->
+  <div class="why-vote-section">
+    <h4 class="section-h4">Why should you vote?</h4>
+    <div class="why-cards">
+      <div class="why-card">
+        <div class="wc-icon">🏘️</div>
+        <div class="wc-title">Local races matter most</div>
+        <div class="wc-text">School boards, county clerks, and city councils make decisions that affect your daily life more directly than federal offices.</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-icon">📊</div>
+        <div class="wc-title">Your vote is statistically significant</div>
+        <div class="wc-text">Local elections are often decided by hundreds — sometimes dozens — of votes. Your vote carries real weight.</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-icon">📋</div>
+        <div class="wc-title">Ballot measures change policy directly</div>
+        <div class="wc-text">Tax levies, bonds, and amendments are decided directly by voters — no politicians in the middle.</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-icon">🗓️</div>
+        <div class="wc-title">Elections happen every year</div>
+        <div class="wc-text">Presidential elections get the attention, but primaries, special elections, and off-cycle races happen constantly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOTING ESSENTIALS -->
+  <div class="essentials-section">
+    <h5 class="section-h5">Get to know your voting essentials</h5>
+    <div class="essentials-grid">
+      <a class="essential-item" href="#">
+        <span class="ei-icon">📍</span>
+        <span class="ei-text">Find your polling place</span>
+      </a>
+      <a class="essential-item" href="#">
+        <span class="ei-icon">🗓️</span>
+        <span class="ei-text">Registration deadlines</span>
+      </a>
+      <a class="essential-item" href="#">
+        <span class="ei-icon">📬</span>
+        <span class="ei-text">Vote by mail options</span>
+      </a>
+      <a class="essential-item" href="#">
+        <span class="ei-icon">🪪</span>
+        <span class="ei-text">Voter ID requirements</span>
+      </a>
+      <a class="essential-item" href="#">
+        <span class="ei-icon">⏰</span>
+        <span class="ei-text">Polling hours</span>
+      </a>
+      <a class="essential-item" href="#">
+        <span class="ei-icon">♿</span>
+        <span class="ei-text">Accessibility services</span>
+      </a>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

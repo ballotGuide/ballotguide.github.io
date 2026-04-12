@@ -1,0 +1,60 @@
+{
+  "location": {
+    "zip": "61820",
+    "city": "Champaign",
+    "county": "Champaign County",
+    "state": "Illinois",
+    "nextElection": "November 4, 2025"
+  },
+  "levels": [
+    { "id": "federal",  "label": "Federal",        "count": 3 },
+    { "id": "state",    "label": "State",           "count": 2 },
+    { "id": "county",   "label": "County",          "count": 4 },
+    { "id": "city",     "label": "City",            "count": 2 },
+    { "id": "school",   "label": "School Board",    "count": 1 },
+    { "id": "measures", "label": "Ballot Measures", "count": 2 }
+  ],
+  "elections": [
+    {
+      "id": "federal",
+      "icon": "🇺🇸",
+      "title": "Federal",
+      "count": "3 races",
+      "offices": "President · U.S. House District 13 · U.S. Senate"
+    },
+    {
+      "id": "state",
+      "icon": "🏛️",
+      "title": "State",
+      "count": "2 races",
+      "offices": "IL State Senate Dist. 52 · IL State House Dist. 103"
+    },
+    {
+      "id": "county",
+      "icon": "📍",
+      "title": "County",
+      "count": "4 races",
+      "offices": "County Clerk · Sheriff · Treasurer · County Board"
+    },
+    {
+      "id": "school",
+      "icon": "🏫",
+      "title": "School Board",
+      "count": "1 race",
+      "offices": "Unit 4 School Board · 2 open seats"
+    },
+    {
+      "id": "measures",
+      "icon": "🗳️",
+      "title": "Ballot Measures",
+      "count": "2 measures",
+      "offices": "Property Tax Levy · Infrastructure Bond"
+    }
+  ],
+  "featured": {
+    "label": "Featured Race",
+    "title": "Champaign Unit 4 School Board",
+    "meta": "4 candidates · 2 open seats · Election Nov 4",
+    "link": "candidate.html"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "timelines": {
+    "jane-smith": [
+      {
+        "year": "2021",
+        "event": "Voted YES on Infrastructure Investment and Jobs Act",
+        "source": "Source: Congress.gov — Roll Call Vote #369",
+        "badge": "vote",
+        "highlight": true
+      },
+      {
+        "year": "2022",
+        "event": "Received $300,000 from energy industry PACs",
+        "source": "Source: OpenSecrets.org — FEC Filing Q2 2022",
+        "badge": "funding",
+        "highlight": false
+      },
+      {
+        "year": "2022",
+        "event": "Co-sponsored Inflation Reduction Act — climate provisions",
+        "source": "Source: Congress.gov — S. 3684",
+        "badge": "bill",
+        "highlight": true
+      },
+      {
+        "year": "2023",
+        "event": "Introduced Illinois Housing Affordability Act",
+        "source": "Source: Illinois General Assembly — HB 4201",
+        "badge": "bill",
+        "highlight": true
+      },
+      {
+        "year": "2024",
+        "event": "Voted NO on budget amendment cutting education funding",
+        "source": "Source: Illinois General Assembly — Roll Call #182",
+        "badge": "vote",
+        "highlight": false
+      }
+    ],
+    "mark-davis": [
+      {
+        "year": "2020",
+        "event": "Elected Champaign County Commissioner",
+        "source": "Source: Champaign County Clerk — Election Results 2020",
+        "badge": "vote",
+        "highlight": true
+      },
+      {
+        "year": "2021",
+        "event": "Voted against county mask mandate resolution",
+        "source": "Source: Champaign County Board Minutes — March 2021",
+        "badge": "vote",
+        "highlight": false
+      },
+      {
+        "year": "2022",
+        "event": "Received $210,000 from oil and gas industry donors",
+        "source": "Source: OpenSecrets.org — FEC Filing Q3 2022",
+        "badge": "funding",
+        "highlight": false
+      },
+      {
+        "year": "2023",
+        "event": "Sponsored county zoning deregulation ordinance",
+        "source": "Source: Champaign County Board — Ordinance 2023-14",
+        "badge": "bill",
+        "highlight": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BallotGuide — Compare Candidates</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { padding-top: 60px; }
+
+    .compare-hero {
+      padding: 64px 64px 40px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .compare-title {
+      font-family: var(--serif); font-size: 48px; letter-spacing: -2px;
+      margin-bottom: 10px;
+    }
+    .compare-subtitle { font-size: 15px; color: var(--gray-500); font-weight: 300; }
+
+    .compare-grid { padding: 48px 64px; }
+
+    .compare-sources {
+      font-size: 12px; color: var(--gray-400); margin-top: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .compare-hero, .compare-grid { padding: 32px 24px; }
+      .compare-title { font-size: 36px; }
+      .compare-candidates { grid-template-columns: 80px 1fr 1fr !important; }
+      .compare-cell { padding: 14px 12px !important; font-size: 12px !important; }
+      .cc-header { padding: 16px 12px !important; }
+      .cc-cand-name { font-size: 15px !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="index.html">BallotGuide</a>
+    <div class="nav-links">
+      <a href="elections.html">Elections</a>
+      <a href="candidate.html">Candidates</a>
+      <a href="compare.html">Compare</a>
+      <a href="#">About</a>
+    </div>
+    <a class="nav-cta" href="index.html">Find My Ballot</a>
+  </nav>
+
+  <a class="back-nav" href="elections.html">← Your Elections</a>
+
+  <!-- HERO -->
+  <div class="compare-hero">
+    <h1 class="compare-title">Compare Candidates</h1>
+    <p class="compare-subtitle">U.S. House — District 13 · Illinois</p>
+  </div>
+
+  <!-- COMPARE TABLE -->
+  <div class="compare-grid">
+    <div class="compare-candidates">
+
+      <!-- Header row -->
+      <div class="cc-header label-col"></div>
+      <div class="cc-header">
+        <div class="cc-cand-name">Jane Smith</div>
+        <div class="cc-cand-party">Democrat</div>
+      </div>
+      <div class="cc-header">
+        <div class="cc-cand-name">Mark Davis</div>
+        <div class="cc-cand-party">Republican</div>
+      </div>
+
+      <!-- Healthcare -->
+      <div class="compare-row">
+        <div class="compare-cell category">Healthcare</div>
+        <div class="compare-cell support">Supports public option and Medicare expansion</div>
+        <div class="compare-cell oppose">Opposes public option; supports private market solutions</div>
+      </div>
+
+      <!-- Energy -->
+      <div class="compare-row">
+        <div class="compare-cell category">Energy</div>
+        <div class="compare-cell support">Supports renewable investment; phased fossil fuel reduction</div>
+        <div class="compare-cell oppose">Supports domestic oil &amp; gas expansion; opposes carbon tax</div>
+      </div>
+
+      <!-- Education -->
+      <div class="compare-row">
+        <div class="compare-cell category">Education</div>
+        <div class="compare-cell support">Supports tuition relief and increased Pell Grants</div>
+        <div class="compare-cell">Supports school choice and vocational alternatives</div>
+      </div>
+
+      <!-- Taxes -->
+      <div class="compare-row">
+        <div class="compare-cell category">Taxes</div>
+        <div class="compare-cell support">Raise corporate tax rate to 28%; maintain middle-class cuts</div>
+        <div class="compare-cell oppose">Extend Trump-era cuts; reduce corporate rate further</div>
+      </div>
+
+      <!-- Housing -->
+      <div class="compare-row">
+        <div class="compare-cell category">Housing</div>
+        <div class="compare-cell support">Supports federal affordable housing construction grants</div>
+        <div class="compare-cell">Supports zoning deregulation at local level</div>
+      </div>
+
+      <!-- Top Funding -->
+      <div class="compare-row">
+        <div class="compare-cell category">Top Donor</div>
+        <div class="compare-cell">Energy Industry PAC — $300k</div>
+        <div class="compare-cell">Real Estate PAC — $420k</div>
+      </div>
+
+    </div>
+
+    <p class="compare-sources">
+      Sources: Ballotpedia · VoteSmart · OpenSecrets.org · Congress.gov
+    </p>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

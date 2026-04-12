@@ -1,0 +1,81 @@
+{
+  "candidates": [
+    {
+      "id": "jane-smith",
+      "initials": "JS",
+      "name": "Jane Smith",
+      "party": "Democrat",
+      "role": "Current: State Senator",
+      "running_for": "U.S. House District 13",
+      "tags": ["Healthcare", "Energy", "Education", "Housing"],
+      "positions": [
+        { "icon": "🏥", "text": "Supports public option healthcare expansion" },
+        { "icon": "☀️", "text": "Supports renewable energy investment" },
+        { "icon": "🎓", "text": "Supports tuition relief for state schools" },
+        { "icon": "🏠", "text": "Supports affordable housing legislation" }
+      ],
+      "funding": [
+        { "source": "Teachers' Union",       "amount": "$180k", "pct": 90 },
+        { "source": "Energy Industry PAC",   "amount": "$300k", "pct": 100 },
+        { "source": "Small Donors (<$200)",  "amount": "$95k",  "pct": 48 }
+      ],
+      "funding_source_note": "Source: OpenSecrets.org · FEC 2024"
+    },
+    {
+      "id": "mark-davis",
+      "initials": "MD",
+      "name": "Mark Davis",
+      "party": "Republican",
+      "role": "Current: County Commissioner",
+      "running_for": "U.S. House District 13",
+      "tags": ["Taxes", "Energy", "Agriculture", "Border"],
+      "positions": [
+        { "icon": "💰", "text": "Supports lower corporate tax rates" },
+        { "icon": "⛽", "text": "Supports domestic oil and gas expansion" },
+        { "icon": "🏫", "text": "Supports school choice and vouchers" },
+        { "icon": "🏘️", "text": "Supports local zoning deregulation" }
+      ],
+      "funding": [
+        { "source": "Real Estate PAC",      "amount": "$420k", "pct": 100 },
+        { "source": "Oil & Gas Industry",   "amount": "$210k", "pct": 50 },
+        { "source": "Small Donors (<$200)", "amount": "$60k",  "pct": 28 }
+      ],
+      "funding_source_note": "Source: OpenSecrets.org · FEC 2024"
+    }
+  ],
+  "compare": {
+    "race": "U.S. House — District 13 · Illinois",
+    "categories": [
+      {
+        "label": "Healthcare",
+        "a": { "stance": "support", "text": "Supports public option and Medicare expansion" },
+        "b": { "stance": "oppose",  "text": "Opposes public option; supports private market solutions" }
+      },
+      {
+        "label": "Energy",
+        "a": { "stance": "support", "text": "Supports renewable investment; phased fossil fuel reduction" },
+        "b": { "stance": "oppose",  "text": "Supports domestic oil & gas expansion; opposes carbon tax" }
+      },
+      {
+        "label": "Education",
+        "a": { "stance": "support", "text": "Supports tuition relief and increased Pell Grants" },
+        "b": { "stance": "",        "text": "Supports school choice and vocational alternatives" }
+      },
+      {
+        "label": "Taxes",
+        "a": { "stance": "support", "text": "Raise corporate tax rate to 28%; maintain middle-class cuts" },
+        "b": { "stance": "oppose",  "text": "Extend Trump-era cuts; reduce corporate rate further" }
+      },
+      {
+        "label": "Housing",
+        "a": { "stance": "support", "text": "Supports federal affordable housing construction grants" },
+        "b": { "stance": "",        "text": "Supports zoning deregulation at local level" }
+      },
+      {
+        "label": "Top Donor",
+        "a": { "stance": "", "text": "Energy Industry PAC — $300k" },
+        "b": { "stance": "", "text": "Real Estate PAC — $420k" }
+      }
+    ]
+  }
+}

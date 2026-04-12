@@ -1,0 +1,1497 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+candidate.html
+compare.html
+css/styles.css
+data/candidates.json
+data/elections.json
+data/timelines.json
+elections.html
+index.html
+js/main.js
+README.md
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="candidate.html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BallotGuide — Candidate Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { padding-top: 60px; }
+
+    /* ── HERO ── */
+    .candidate-hero {
+      padding: 64px 64px 48px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex; gap: 48px; align-items: flex-start;
+    }
+    .candidate-avatar {
+      width: 96px; height: 96px; border-radius: 24px;
+      background: var(--gray-100); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; font-family: var(--serif);
+      color: var(--gray-400);
+    }
+    .candidate-meta { flex: 1; }
+    .candidate-name {
+      font-family: var(--serif); font-size: 48px;
+      letter-spacing: -2px; color: var(--black);
+      line-height: 1; margin-bottom: 8px;
+    }
+    .candidate-role { font-size: 15px; color: var(--gray-500); font-weight: 300; margin-bottom: 20px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    /* ── BODY LAYOUT ── */
+    .candidate-body { display: grid; grid-template-columns: 1fr 320px; }
+
+    /* ── TIMELINE ── */
+    .timeline-section { padding: 48px 64px; border-right: 1px solid var(--gray-100); }
+    .timeline-section h3 {
+      font-family: var(--serif); font-size: 24px; letter-spacing: -0.5px;
+      margin-bottom: 32px;
+    }
+
+    /* ── SIDEBAR ── */
+    .candidate-sidebar { padding: 48px 40px; }
+    .sidebar-section { margin-bottom: 36px; }
+    .sidebar-section h4 {
+      font-size: 11px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gray-400); margin-bottom: 16px;
+    }
+    .position-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .pos-icon { font-size: 16px; flex-shrink: 0; }
+    .pos-text { font-size: 13px; color: var(--black); line-height: 1.4; }
+
+    .compare-btn {
+      width: 100%; padding: 14px; background: var(--black); color: var(--white);
+      border: none; border-radius: 12px; font-family: var(--sans);
+      font-size: 14px; font-weight: 500; cursor: pointer;
+      transition: opacity var(--transition); text-decoration: none;
+      display: block; text-align: center;
+    }
+    .compare-btn:hover { opacity: 0.8; }
+
+    .hero-compare-btn {
+      padding: 12px 24px; background: var(--black); color: var(--white);
+      border: none; border-radius: 12px; font-family: var(--sans);
+      font-size: 14px; font-weight: 500; cursor: pointer;
+      transition: opacity var(--transition); text-decoration: none;
+      display: inline-flex; align-items: center; align-self: flex-start;
+      white-space: nowrap;
+    }
+    .hero-compare-btn:hover { opacity: 0.8; }
+
+    @media (max-width: 768px) {
+      .candidate-hero { flex-direction: column; padding: 32px 24px; gap: 24px; }
+      .candidate-name { font-size: 36px; }
+      .candidate-body { grid-template-columns: 1fr; }
+      .timeline-section { border-right: none; border-bottom: 1px solid var(--gray-100); padding: 32px 24px; }
+      .candidate-sidebar { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="index.html">BallotGuide</a>
+    <div class="nav-links">
+      <a href="elections.html">Elections</a>
+      <a href="candidate.html">Candidates</a>
+      <a href="compare.html">Compare</a>
+      <a href="#">About</a>
+    </div>
+    <a class="nav-cta" href="index.html">Find My Ballot</a>
+  </nav>
+
+  <a class="back-nav" href="elections.html">← Your Elections</a>
+
+  <!-- HERO -->
+  <div class="candidate-hero">
+    <div class="candidate-avatar">JS</div>
+    <div class="candidate-meta">
+      <h1 class="candidate-name">Jane Smith</h1>
+      <p class="candidate-role">Current: State Senator · Running for U.S. House District 13</p>
+      <div class="tag-row">
+        <span class="tag dem">Democrat</span>
+        <span class="tag">Healthcare</span>
+        <span class="tag">Energy</span>
+        <span class="tag">Education</span>
+        <span class="tag">Housing</span>
+      </div>
+    </div>
+    <a class="hero-compare-btn" href="compare.html">Compare →</a>
+  </div>
+
+  <!-- BODY -->
+  <div class="candidate-body">
+
+    <!-- TIMELINE -->
+    <div class="timeline-section">
+      <h3>Record &amp; Actions</h3>
+      <div class="timeline">
+
+        <div class="tl-item">
+          <div class="tl-left">
+            <span class="tl-year">2021</span>
+            <div class="tl-dot highlight"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-event">Voted YES on Infrastructure Investment and Jobs Act</div>
+            <div class="tl-source">Source: Congress.gov — Roll Call Vote #369</div>
+            <span class="tl-badge vote">Vote</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-left">
+            <span class="tl-year">2022</span>
+            <div class="tl-dot"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-event">Received $300,000 from energy industry PACs</div>
+            <div class="tl-source">Source: OpenSecrets.org — FEC Filing Q2 2022</div>
+            <span class="tl-badge funding">Funding</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-left">
+            <span class="tl-year">2022</span>
+            <div class="tl-dot highlight"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-event">Co-sponsored Inflation Reduction Act — climate provisions</div>
+            <div class="tl-source">Source: Congress.gov — S. 3684</div>
+            <span class="tl-badge bill">Bill</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-left">
+            <span class="tl-year">2023</span>
+            <div class="tl-dot highlight"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-event">Introduced Illinois Housing Affordability Act</div>
+            <div class="tl-source">Source: Illinois General Assembly — HB 4201</div>
+            <span class="tl-badge bill">Bill</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-left">
+            <span class="tl-year">2024</span>
+            <div class="tl-dot"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-event">Voted NO on budget amendment cutting education funding</div>
+            <div class="tl-source">Source: Illinois General Assembly — Roll Call #182</div>
+            <span class="tl-badge vote">Vote</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="candidate-sidebar">
+      <div class="sidebar-section">
+        <h4>Key Positions</h4>
+        <div class="position-item">
+          <span class="pos-icon">🏥</span>
+          <span class="pos-text">Supports public option healthcare expansion</span>
+        </div>
+        <div class="position-item">
+          <span class="pos-icon">☀️</span>
+          <span class="pos-text">Supports renewable energy investment</span>
+        </div>
+        <div class="position-item">
+          <span class="pos-icon">🎓</span>
+          <span class="pos-text">Supports tuition relief for state schools</span>
+        </div>
+        <div class="position-item">
+          <span class="pos-icon">🏠</span>
+          <span class="pos-text">Supports affordable housing legislation</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Top Funding Sources</h4>
+        <div class="funding-bar">
+          <div class="fb-row">
+            <span class="fb-label-text">Teachers' Union</span>
+            <span class="fb-amount">$180k</span>
+          </div>
+          <div class="fb-track"><div class="fb-fill" style="width:90%"></div></div>
+        </div>
+        <div class="funding-bar">
+          <div class="fb-row">
+            <span class="fb-label-text">Energy Industry PAC</span>
+            <span class="fb-amount">$300k</span>
+          </div>
+          <div class="fb-track"><div class="fb-fill" style="width:100%"></div></div>
+        </div>
+        <div class="funding-bar">
+          <div class="fb-row">
+            <span class="fb-label-text">Small Donors (&lt;$200)</span>
+            <span class="fb-amount">$95k</span>
+          </div>
+          <div class="fb-track"><div class="fb-fill" style="width:48%"></div></div>
+        </div>
+        <p style="font-size:11px;color:var(--gray-400);margin-top:8px;">Source: OpenSecrets.org · FEC 2024</p>
+      </div>
+
+      <a class="compare-btn" href="compare.html">Compare with Opponent →</a>
+    </div>
+
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
+</file>
+
+<file path="compare.html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BallotGuide — Compare Candidates</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { padding-top: 60px; }
+
+    .compare-hero {
+      padding: 64px 64px 40px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .compare-title {
+      font-family: var(--serif); font-size: 48px; letter-spacing: -2px;
+      margin-bottom: 10px;
+    }
+    .compare-subtitle { font-size: 15px; color: var(--gray-500); font-weight: 300; }
+
+    .compare-grid { padding: 48px 64px; }
+
+    .compare-sources {
+      font-size: 12px; color: var(--gray-400); margin-top: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .compare-hero, .compare-grid { padding: 32px 24px; }
+      .compare-title { font-size: 36px; }
+      .compare-candidates { grid-template-columns: 80px 1fr 1fr !important; }
+      .compare-cell { padding: 14px 12px !important; font-size: 12px !important; }
+      .cc-header { padding: 16px 12px !important; }
+      .cc-cand-name { font-size: 15px !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="index.html">BallotGuide</a>
+    <div class="nav-links">
+      <a href="elections.html">Elections</a>
+      <a href="candidate.html">Candidates</a>
+      <a href="compare.html">Compare</a>
+      <a href="#">About</a>
+    </div>
+    <a class="nav-cta" href="index.html">Find My Ballot</a>
+  </nav>
+
+  <a class="back-nav" href="elections.html">← Your Elections</a>
+
+  <!-- HERO -->
+  <div class="compare-hero">
+    <h1 class="compare-title">Compare Candidates</h1>
+    <p class="compare-subtitle">U.S. House — District 13 · Illinois</p>
+  </div>
+
+  <!-- COMPARE TABLE -->
+  <div class="compare-grid">
+    <div class="compare-candidates">
+
+      <!-- Header row -->
+      <div class="cc-header label-col"></div>
+      <div class="cc-header">
+        <div class="cc-cand-name">Jane Smith</div>
+        <div class="cc-cand-party">Democrat</div>
+      </div>
+      <div class="cc-header">
+        <div class="cc-cand-name">Mark Davis</div>
+        <div class="cc-cand-party">Republican</div>
+      </div>
+
+      <!-- Healthcare -->
+      <div class="compare-row">
+        <div class="compare-cell category">Healthcare</div>
+        <div class="compare-cell support">Supports public option and Medicare expansion</div>
+        <div class="compare-cell oppose">Opposes public option; supports private market solutions</div>
+      </div>
+
+      <!-- Energy -->
+      <div class="compare-row">
+        <div class="compare-cell category">Energy</div>
+        <div class="compare-cell support">Supports renewable investment; phased fossil fuel reduction</div>
+        <div class="compare-cell oppose">Supports domestic oil &amp; gas expansion; opposes carbon tax</div>
+      </div>
+
+      <!-- Education -->
+      <div class="compare-row">
+        <div class="compare-cell category">Education</div>
+        <div class="compare-cell support">Supports tuition relief and increased Pell Grants</div>
+        <div class="compare-cell">Supports school choice and vocational alternatives</div>
+      </div>
+
+      <!-- Taxes -->
+      <div class="compare-row">
+        <div class="compare-cell category">Taxes</div>
+        <div class="compare-cell support">Raise corporate tax rate to 28%; maintain middle-class cuts</div>
+        <div class="compare-cell oppose">Extend Trump-era cuts; reduce corporate rate further</div>
+      </div>
+
+      <!-- Housing -->
+      <div class="compare-row">
+        <div class="compare-cell category">Housing</div>
+        <div class="compare-cell support">Supports federal affordable housing construction grants</div>
+        <div class="compare-cell">Supports zoning deregulation at local level</div>
+      </div>
+
+      <!-- Top Funding -->
+      <div class="compare-row">
+        <div class="compare-cell category">Top Donor</div>
+        <div class="compare-cell">Energy Industry PAC — $300k</div>
+        <div class="compare-cell">Real Estate PAC — $420k</div>
+      </div>
+
+    </div>
+
+    <p class="compare-sources">
+      Sources: Ballotpedia · VoteSmart · OpenSecrets.org · Congress.gov
+    </p>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
+</file>
+
+<file path="css/styles.css">
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #0a0a0a;
+  --gray-900: #1a1a1a;
+  --gray-700: #3a3a3a;
+  --gray-600: #4a4a4a;
+  --gray-500: #6a6a6a;
+  --gray-400: #8a8a8a;
+  --gray-300: #c0c0c0;
+  --gray-200: #e0e0e0;
+  --gray-100: #f0f0f0;
+  --gray-50: #f8f8f8;
+  --white: #ffffff;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --radius: 16px;
+  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--white);
+  color: var(--black);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 60px;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.nav-logo {
+  font-family: var(--serif); font-size: 22px; letter-spacing: -0.5px;
+  color: var(--black); cursor: pointer; text-decoration: none;
+}
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  font-size: 14px; font-weight: 500; color: var(--gray-500);
+  text-decoration: none; transition: color var(--transition);
+}
+.nav-links a:hover { color: var(--black); }
+.nav-cta {
+  padding: 8px 20px; background: var(--black); color: var(--white);
+  border: none; border-radius: 100px; font-family: var(--sans);
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: opacity var(--transition); text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+.nav-cta:hover { opacity: 0.8; }
+
+/* ── BACK NAV ── */
+.back-nav {
+  padding: 16px 64px 0;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--gray-500); cursor: pointer;
+  transition: color var(--transition); text-decoration: none;
+  width: fit-content;
+}
+.back-nav:hover { color: var(--black); }
+
+/* ── BUTTONS ── */
+.btn-primary {
+  padding: 16px 28px; background: var(--black); color: var(--white);
+  border: none; border-radius: 14px; font-family: var(--sans);
+  font-size: 15px; font-weight: 500; cursor: pointer; white-space: nowrap;
+  transition: opacity var(--transition), transform var(--transition);
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-ghost {
+  padding: 14px 20px; background: transparent; color: var(--gray-500);
+  border: 1.5px solid var(--gray-200); border-radius: 14px;
+  font-family: var(--sans); font-size: 14px; font-weight: 400;
+  cursor: pointer; transition: all var(--transition);
+  display: flex; align-items: center; gap: 8px; text-decoration: none;
+}
+.btn-ghost:hover { border-color: var(--gray-500); color: var(--black); }
+
+/* ── ANIMATIONS ── */
+.fade-up {
+  opacity: 0; transform: translateY(24px);
+  animation: fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+
+/* ── SHARED SECTION LABELS ── */
+.section-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--gray-400);
+  margin-bottom: 20px;
+}
+
+/* ── TAGS ── */
+.tag {
+  padding: 6px 14px; border: 1.5px solid var(--gray-200);
+  border-radius: 100px; font-size: 12px; font-weight: 500;
+  color: var(--gray-600);
+}
+.tag.dem { border-color: #1a1a1a; background: var(--gray-50); }
+
+/* ── DISTRICT CHIPS ── */
+.district-chip {
+  flex-shrink: 0; padding: 14px 22px;
+  border: 1.5px solid var(--gray-200); border-radius: 100px;
+  cursor: pointer; transition: all var(--transition);
+  display: flex; flex-direction: column; gap: 2px;
+  background: var(--white); min-width: 160px;
+}
+.district-chip:hover, .district-chip.active {
+  border-color: var(--black); background: var(--black);
+}
+.district-chip:hover .chip-name,
+.district-chip.active .chip-name { color: var(--white); }
+.district-chip:hover .chip-sub,
+.district-chip.active .chip-sub { color: rgba(255,255,255,0.5); }
+.chip-name { font-size: 14px; font-weight: 500; color: var(--black); }
+.chip-sub { font-size: 11px; color: var(--gray-400); }
+
+/* ── ELECTION CARDS ── */
+.election-cards {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.election-card {
+  padding: 28px; border: 1.5px solid var(--gray-100); border-radius: var(--radius);
+  cursor: pointer; transition: all var(--transition);
+  display: flex; flex-direction: column; gap: 16px;
+  background: var(--white); text-decoration: none; color: inherit;
+}
+.election-card:hover { border-color: var(--black); box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
+.ec-top { display: flex; align-items: flex-start; justify-content: space-between; }
+.ec-icon {
+  width: 44px; height: 44px; background: var(--gray-50);
+  border-radius: 12px; display: flex; align-items: center;
+  justify-content: center; font-size: 22px;
+}
+.ec-count {
+  font-size: 12px; font-weight: 500; color: var(--gray-400);
+  background: var(--gray-50); padding: 4px 10px; border-radius: 100px;
+}
+.ec-title { font-family: var(--serif); font-size: 22px; letter-spacing: -0.5px; color: var(--black); }
+.ec-offices { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+.ec-arrow { font-size: 18px; color: var(--gray-300); align-self: flex-end; }
+
+/* ── FEATURED BANNER ── */
+.featured-banner {
+  background: var(--black); color: var(--white);
+  border-radius: var(--radius); padding: 40px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; transition: opacity var(--transition);
+  gap: 32px; text-decoration: none;
+}
+.featured-banner:hover { opacity: 0.92; }
+.fb-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,0.4);
+  margin-bottom: 12px;
+}
+.fb-title { font-family: var(--serif); font-size: 30px; letter-spacing: -1px; margin-bottom: 10px; color: var(--white); }
+.fb-meta { font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 300; }
+.fb-cta {
+  flex-shrink: 0; padding: 14px 26px;
+  border: 1.5px solid rgba(255,255,255,0.25); border-radius: 100px;
+  font-size: 14px; font-weight: 500; color: var(--white);
+  white-space: nowrap;
+}
+
+/* ── COMPARE TILE ── */
+.compare-tile {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 22px; border: 1.5px solid var(--gray-200);
+  border-radius: 14px; cursor: pointer;
+  transition: all var(--transition); background: var(--white);
+  max-width: 240px; text-decoration: none; color: inherit;
+}
+.compare-tile:hover { border-color: var(--black); }
+.compare-icon {
+  width: 36px; height: 36px; background: var(--gray-100);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 18px;
+}
+.compare-tile-text .ct-title { font-size: 13px; font-weight: 600; color: var(--black); }
+.compare-tile-text .ct-sub { font-size: 12px; color: var(--gray-500); }
+
+/* ── TIMELINE ── */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item {
+  display: flex; gap: 24px; position: relative;
+  padding-bottom: 32px;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item:last-child .tl-line { display: none; }
+.tl-left { display: flex; flex-direction: column; align-items: center; width: 60px; flex-shrink: 0; }
+.tl-year { font-size: 12px; font-weight: 600; color: var(--gray-400); text-align: center; }
+.tl-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--gray-300); margin: 6px 0; flex-shrink: 0;
+}
+.tl-dot.highlight { background: var(--black); }
+.tl-line { width: 1px; flex: 1; background: var(--gray-100); min-height: 20px; }
+.tl-content {
+  flex: 1; padding: 14px 18px; border: 1.5px solid var(--gray-100);
+  border-radius: 12px; background: var(--white);
+}
+.tl-event { font-size: 14px; font-weight: 500; color: var(--black); margin-bottom: 4px; }
+.tl-source { font-size: 12px; color: var(--gray-400); }
+.tl-badge {
+  display: inline-block; padding: 3px 8px; border-radius: 100px;
+  font-size: 11px; font-weight: 500; margin-top: 6px;
+}
+.tl-badge.vote { background: #f0f0f0; color: #555; }
+.tl-badge.funding { background: #fff0f0; color: #c44; }
+.tl-badge.bill { background: #f0fff4; color: #3a8; }
+
+/* ── FUNDING BARS ── */
+.funding-bar { margin-bottom: 12px; }
+.funding-bar .fb-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+.funding-bar .fb-label-text { color: var(--gray-600); }
+.funding-bar .fb-amount { font-weight: 600; color: var(--black); }
+.fb-track {
+  height: 4px; background: var(--gray-100); border-radius: 100px; overflow: hidden;
+}
+.fb-fill { height: 100%; background: var(--black); border-radius: 100px; }
+
+/* ── COMPARE TABLE ── */
+.compare-candidates {
+  display: grid; grid-template-columns: 200px 1fr 1fr; gap: 0;
+  border: 1.5px solid var(--gray-100); border-radius: var(--radius); overflow: hidden;
+}
+.cc-header {
+  background: var(--gray-50); padding: 24px 28px;
+  border-bottom: 1.5px solid var(--gray-100);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.cc-header.label-col { background: var(--white); }
+.cc-cand-name { font-family: var(--serif); font-size: 20px; letter-spacing: -0.5px; }
+.cc-cand-party {
+  font-size: 11px; font-weight: 500; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--gray-400);
+}
+.compare-row { display: contents; }
+.compare-cell {
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--gray-100);
+  border-right: 1px solid var(--gray-100);
+  font-size: 14px; color: var(--black); line-height: 1.5;
+}
+.compare-cell.category {
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--gray-400);
+  background: var(--white); display: flex; align-items: center;
+}
+.compare-cell.support { color: #2a7a4a; }
+.compare-cell.oppose { color: #c44; }
+.compare-cell:last-child { border-right: none; }
+
+/* ── CAROUSEL NAV ── */
+.carousel-nav {
+  position: absolute; right: 64px; top: 40px;
+  display: flex; gap: 8px;
+}
+.cnav-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1.5px solid var(--gray-200); background: var(--white);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+.cnav-btn:hover { border-color: var(--black); background: var(--black); }
+.cnav-btn:hover svg path { stroke: var(--white); }
+.cnav-btn svg { width: 14px; height: 14px; }
+.cnav-btn svg path { stroke: var(--gray-500); stroke-width: 2; fill: none; stroke-linecap: round; }
+
+/* ── OR DIVIDER ── */
+.or-divider {
+  display: flex; align-items: center; gap: 16px;
+  color: var(--gray-300); font-size: 13px;
+}
+.or-divider::before, .or-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--gray-200);
+}
+
+/* ────────────────────────────────────────────
+   RESPONSIVE
+──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .back-nav { padding-left: 24px; }
+  .elections-hero, .carousel-section, .explore-section,
+  .featured-section { padding-left: 24px !important; padding-right: 24px !important; }
+  .elections-title { width: auto !important; font-size: 40px !important; }
+  .section-h2 { width: auto !important; }
+  .candidate-hero { padding: 32px 24px !important; flex-direction: column !important; gap: 24px !important; }
+  .candidate-name { font-size: 36px !important; }
+  .candidate-body { grid-template-columns: 1fr !important; }
+  .timeline-section, .candidate-sidebar { padding: 32px 24px !important; }
+  .compare-hero, .compare-grid { padding: 32px 24px !important; }
+  .compare-candidates { grid-template-columns: 100px 1fr 1fr !important; }
+  .carousel-nav { display: none; }
+}
+</file>
+
+<file path="data/candidates.json">
+{
+  "candidates": [
+    {
+      "id": "jane-smith",
+      "initials": "JS",
+      "name": "Jane Smith",
+      "party": "Democrat",
+      "role": "Current: State Senator",
+      "running_for": "U.S. House District 13",
+      "tags": ["Healthcare", "Energy", "Education", "Housing"],
+      "positions": [
+        { "icon": "🏥", "text": "Supports public option healthcare expansion" },
+        { "icon": "☀️", "text": "Supports renewable energy investment" },
+        { "icon": "🎓", "text": "Supports tuition relief for state schools" },
+        { "icon": "🏠", "text": "Supports affordable housing legislation" }
+      ],
+      "funding": [
+        { "source": "Teachers' Union",       "amount": "$180k", "pct": 90 },
+        { "source": "Energy Industry PAC",   "amount": "$300k", "pct": 100 },
+        { "source": "Small Donors (<$200)",  "amount": "$95k",  "pct": 48 }
+      ],
+      "funding_source_note": "Source: OpenSecrets.org · FEC 2024"
+    },
+    {
+      "id": "mark-davis",
+      "initials": "MD",
+      "name": "Mark Davis",
+      "party": "Republican",
+      "role": "Current: County Commissioner",
+      "running_for": "U.S. House District 13",
+      "tags": ["Taxes", "Energy", "Agriculture", "Border"],
+      "positions": [
+        { "icon": "💰", "text": "Supports lower corporate tax rates" },
+        { "icon": "⛽", "text": "Supports domestic oil and gas expansion" },
+        { "icon": "🏫", "text": "Supports school choice and vouchers" },
+        { "icon": "🏘️", "text": "Supports local zoning deregulation" }
+      ],
+      "funding": [
+        { "source": "Real Estate PAC",      "amount": "$420k", "pct": 100 },
+        { "source": "Oil & Gas Industry",   "amount": "$210k", "pct": 50 },
+        { "source": "Small Donors (<$200)", "amount": "$60k",  "pct": 28 }
+      ],
+      "funding_source_note": "Source: OpenSecrets.org · FEC 2024"
+    }
+  ],
+  "compare": {
+    "race": "U.S. House — District 13 · Illinois",
+    "categories": [
+      {
+        "label": "Healthcare",
+        "a": { "stance": "support", "text": "Supports public option and Medicare expansion" },
+        "b": { "stance": "oppose",  "text": "Opposes public option; supports private market solutions" }
+      },
+      {
+        "label": "Energy",
+        "a": { "stance": "support", "text": "Supports renewable investment; phased fossil fuel reduction" },
+        "b": { "stance": "oppose",  "text": "Supports domestic oil & gas expansion; opposes carbon tax" }
+      },
+      {
+        "label": "Education",
+        "a": { "stance": "support", "text": "Supports tuition relief and increased Pell Grants" },
+        "b": { "stance": "",        "text": "Supports school choice and vocational alternatives" }
+      },
+      {
+        "label": "Taxes",
+        "a": { "stance": "support", "text": "Raise corporate tax rate to 28%; maintain middle-class cuts" },
+        "b": { "stance": "oppose",  "text": "Extend Trump-era cuts; reduce corporate rate further" }
+      },
+      {
+        "label": "Housing",
+        "a": { "stance": "support", "text": "Supports federal affordable housing construction grants" },
+        "b": { "stance": "",        "text": "Supports zoning deregulation at local level" }
+      },
+      {
+        "label": "Top Donor",
+        "a": { "stance": "", "text": "Energy Industry PAC — $300k" },
+        "b": { "stance": "", "text": "Real Estate PAC — $420k" }
+      }
+    ]
+  }
+}
+</file>
+
+<file path="data/elections.json">
+{
+  "location": {
+    "zip": "61820",
+    "city": "Champaign",
+    "county": "Champaign County",
+    "state": "Illinois",
+    "nextElection": "November 4, 2025"
+  },
+  "levels": [
+    { "id": "federal",  "label": "Federal",        "count": 3 },
+    { "id": "state",    "label": "State",           "count": 2 },
+    { "id": "county",   "label": "County",          "count": 4 },
+    { "id": "city",     "label": "City",            "count": 2 },
+    { "id": "school",   "label": "School Board",    "count": 1 },
+    { "id": "measures", "label": "Ballot Measures", "count": 2 }
+  ],
+  "elections": [
+    {
+      "id": "federal",
+      "icon": "🇺🇸",
+      "title": "Federal",
+      "count": "3 races",
+      "offices": "President · U.S. House District 13 · U.S. Senate"
+    },
+    {
+      "id": "state",
+      "icon": "🏛️",
+      "title": "State",
+      "count": "2 races",
+      "offices": "IL State Senate Dist. 52 · IL State House Dist. 103"
+    },
+    {
+      "id": "county",
+      "icon": "📍",
+      "title": "County",
+      "count": "4 races",
+      "offices": "County Clerk · Sheriff · Treasurer · County Board"
+    },
+    {
+      "id": "school",
+      "icon": "🏫",
+      "title": "School Board",
+      "count": "1 race",
+      "offices": "Unit 4 School Board · 2 open seats"
+    },
+    {
+      "id": "measures",
+      "icon": "🗳️",
+      "title": "Ballot Measures",
+      "count": "2 measures",
+      "offices": "Property Tax Levy · Infrastructure Bond"
+    }
+  ],
+  "featured": {
+    "label": "Featured Race",
+    "title": "Champaign Unit 4 School Board",
+    "meta": "4 candidates · 2 open seats · Election Nov 4",
+    "link": "candidate.html"
+  }
+}
+</file>
+
+<file path="data/timelines.json">
+{
+  "timelines": {
+    "jane-smith": [
+      {
+        "year": "2021",
+        "event": "Voted YES on Infrastructure Investment and Jobs Act",
+        "source": "Source: Congress.gov — Roll Call Vote #369",
+        "badge": "vote",
+        "highlight": true
+      },
+      {
+        "year": "2022",
+        "event": "Received $300,000 from energy industry PACs",
+        "source": "Source: OpenSecrets.org — FEC Filing Q2 2022",
+        "badge": "funding",
+        "highlight": false
+      },
+      {
+        "year": "2022",
+        "event": "Co-sponsored Inflation Reduction Act — climate provisions",
+        "source": "Source: Congress.gov — S. 3684",
+        "badge": "bill",
+        "highlight": true
+      },
+      {
+        "year": "2023",
+        "event": "Introduced Illinois Housing Affordability Act",
+        "source": "Source: Illinois General Assembly — HB 4201",
+        "badge": "bill",
+        "highlight": true
+      },
+      {
+        "year": "2024",
+        "event": "Voted NO on budget amendment cutting education funding",
+        "source": "Source: Illinois General Assembly — Roll Call #182",
+        "badge": "vote",
+        "highlight": false
+      }
+    ],
+    "mark-davis": [
+      {
+        "year": "2020",
+        "event": "Elected Champaign County Commissioner",
+        "source": "Source: Champaign County Clerk — Election Results 2020",
+        "badge": "vote",
+        "highlight": true
+      },
+      {
+        "year": "2021",
+        "event": "Voted against county mask mandate resolution",
+        "source": "Source: Champaign County Board Minutes — March 2021",
+        "badge": "vote",
+        "highlight": false
+      },
+      {
+        "year": "2022",
+        "event": "Received $210,000 from oil and gas industry donors",
+        "source": "Source: OpenSecrets.org — FEC Filing Q3 2022",
+        "badge": "funding",
+        "highlight": false
+      },
+      {
+        "year": "2023",
+        "event": "Sponsored county zoning deregulation ordinance",
+        "source": "Source: Champaign County Board — Ordinance 2023-14",
+        "badge": "bill",
+        "highlight": true
+      }
+    ]
+  }
+}
+</file>
+
+<file path="elections.html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BallotGuide — Your Elections</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { padding-top: 60px; }
+
+    /* ── HERO ── */
+    .elections-hero {
+      padding: 72px 64px 48px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .elections-location-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--gray-500);
+      margin-bottom: 20px;
+    }
+    .loc-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--black); display: inline-block;
+    }
+    .elections-title {
+      font-family: var(--serif); font-size: 56px;
+      letter-spacing: -2px; line-height: 1.0;
+      color: var(--black); margin-bottom: 10px;
+      width: 420px;
+    }
+    .elections-subtitle {
+      font-size: 16px; color: var(--gray-500); font-weight: 300;
+      max-width: 440px; line-height: 1.5;
+    }
+
+    /* ── CAROUSEL ── */
+    .carousel-section {
+      padding: 40px 64px;
+      border-bottom: 1px solid var(--gray-100);
+      position: relative;
+    }
+    .carousel-track {
+      display: flex; gap: 14px; overflow-x: auto;
+      scrollbar-width: none; scroll-behavior: smooth;
+      padding-bottom: 4px;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+
+    /* ── EXPLORE SECTION ── */
+    .explore-section { padding: 56px 64px; }
+    .section-header {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; margin-bottom: 36px;
+    }
+    .section-h2 {
+      font-family: var(--serif); font-size: 34px;
+      letter-spacing: -1px; color: var(--black);
+      width: 420px;
+    }
+
+    /* ── FEATURED / TAKE A CLOSER LOOK ── */
+    .featured-section { padding: 0 64px 56px; }
+    .section-h3 {
+      font-family: var(--serif); font-size: 26px;
+      letter-spacing: -0.5px; color: var(--black);
+      margin-bottom: 24px;
+    }
+
+    /* ── WHY VOTE ── */
+    .why-vote-section {
+      padding: 56px 64px;
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-100);
+    }
+    .section-h4 {
+      font-family: var(--serif); font-size: 22px;
+      letter-spacing: -0.5px; color: var(--black);
+      margin-bottom: 24px;
+    }
+    .why-cards {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .why-card {
+      padding: 24px; background: var(--white);
+      border: 1.5px solid var(--gray-100); border-radius: var(--radius);
+    }
+    .why-card .wc-icon { font-size: 28px; margin-bottom: 12px; }
+    .why-card .wc-title { font-size: 15px; font-weight: 600; color: var(--black); margin-bottom: 6px; }
+    .why-card .wc-text { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+
+    /* ── VOTING ESSENTIALS ── */
+    .essentials-section { padding: 56px 64px; }
+    .section-h5 {
+      font-family: var(--serif); font-size: 20px;
+      letter-spacing: -0.3px; color: var(--black);
+      margin-bottom: 24px;
+    }
+    .essentials-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .essential-item {
+      padding: 18px 20px; border: 1.5px solid var(--gray-100);
+      border-radius: 12px; display: flex; align-items: center;
+      gap: 12px; cursor: pointer; transition: all var(--transition);
+      background: var(--white); text-decoration: none; color: inherit;
+    }
+    .essential-item:hover { border-color: var(--black); }
+    .essential-item .ei-icon { font-size: 20px; flex-shrink: 0; }
+    .essential-item .ei-text { font-size: 13px; font-weight: 500; color: var(--black); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="index.html">BallotGuide</a>
+    <div class="nav-links">
+      <a href="elections.html">Elections</a>
+      <a href="candidate.html">Candidates</a>
+      <a href="compare.html">Compare</a>
+      <a href="#">About</a>
+    </div>
+    <a class="nav-cta" href="index.html">Find My Ballot</a>
+  </nav>
+
+  <a class="back-nav" href="index.html">← Back</a>
+
+  <!-- HERO -->
+  <div class="elections-hero">
+    <div class="elections-location-tag">
+      <span class="loc-dot"></span>
+      Champaign County, Illinois · 61820
+    </div>
+    <h1 class="elections-title">Your Elections</h1>
+    <p class="elections-subtitle">6 races across 4 civic levels. Next election: November 4, 2025.</p>
+  </div>
+
+  <!-- DISTRICT CAROUSEL -->
+  <div class="carousel-section">
+    <div class="section-label">Your Civic Levels</div>
+    <div class="carousel-nav">
+      <button class="cnav-btn" onclick="scrollCarousel(-1)">
+        <svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5" /></svg>
+      </button>
+      <button class="cnav-btn" onclick="scrollCarousel(1)">
+        <svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5" /></svg>
+      </button>
+    </div>
+    <div class="carousel-track" id="carousel">
+      <div class="district-chip active" onclick="setActiveChip(this)">
+        <span class="chip-name">Federal</span>
+        <span class="chip-sub">3 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">State</span>
+        <span class="chip-sub">2 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">County</span>
+        <span class="chip-sub">4 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">City</span>
+        <span class="chip-sub">2 races</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">School Board</span>
+        <span class="chip-sub">1 race</span>
+      </div>
+      <div class="district-chip" onclick="setActiveChip(this)">
+        <span class="chip-name">Ballot Measures</span>
+        <span class="chip-sub">2 measures</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPLORE ELECTIONS -->
+  <div class="explore-section">
+    <div class="section-header">
+      <h2 class="section-h2">Explore Elections</h2>
+      <a class="compare-tile" href="compare.html">
+        <div class="compare-icon">⚖️</div>
+        <div class="compare-tile-text">
+          <div class="ct-title">Compare Candidates</div>
+          <div class="ct-sub">Side-by-side positions</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="election-cards">
+      <a class="election-card" href="candidate.html">
+        <div class="ec-top">
+          <div class="ec-icon">🇺🇸</div>
+          <span class="ec-count">3 races</span>
+        </div>
+        <div class="ec-title">Federal</div>
+        <div class="ec-offices">President · U.S. House District 13 · U.S. Senate</div>
+        <div class="ec-arrow">→</div>
+      </a>
+      <a class="election-card" href="candidate.html">
+        <div class="ec-top">
+          <div class="ec-icon">🏛️</div>
+          <span class="ec-count">2 races</span>
+        </div>
+        <div class="ec-title">State</div>
+        <div class="ec-offices">IL State Senate Dist. 52 · IL State House Dist. 103</div>
+        <div class="ec-arrow">→</div>
+      </a>
+      <a class="election-card" href="candidate.html">
+        <div class="ec-top">
+          <div class="ec-icon">📍</div>
+          <span class="ec-count">4 races</span>
+        </div>
+        <div class="ec-title">County</div>
+        <div class="ec-offices">County Clerk · Sheriff · Treasurer · County Board</div>
+        <div class="ec-arrow">→</div>
+      </a>
+      <a class="election-card" href="candidate.html">
+        <div class="ec-top">
+          <div class="ec-icon">🏫</div>
+          <span class="ec-count">1 race</span>
+        </div>
+        <div class="ec-title">School Board</div>
+        <div class="ec-offices">Unit 4 School Board · 2 open seats</div>
+        <div class="ec-arrow">→</div>
+      </a>
+      <a class="election-card" href="candidate.html">
+        <div class="ec-top">
+          <div class="ec-icon">🗳️</div>
+          <span class="ec-count">2 measures</span>
+        </div>
+        <div class="ec-title">Ballot Measures</div>
+        <div class="ec-offices">Property Tax Levy · Infrastructure Bond</div>
+        <div class="ec-arrow">→</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- TAKE A CLOSER LOOK -->
+  <div class="featured-section">
+    <h3 class="section-h3">Take a Closer Look</h3>
+    <a class="featured-banner" href="candidate.html">
+      <div>
+        <div class="fb-label">Featured Race</div>
+        <div class="fb-title">Champaign Unit 4 School Board</div>
+        <div class="fb-meta">4 candidates · 2 open seats · Election Nov 4</div>
+      </div>
+      <div class="fb-cta">Explore Candidates →</div>
+    </a>
+  </div>
+
+  <!-- WHY SHOULD YOU VOTE -->
+  <div class="why-vote-section">
+    <h4 class="section-h4">Why should you vote?</h4>
+    <div class="why-cards">
+      <div class="why-card">
+        <div class="wc-icon">🏘️</div>
+        <div class="wc-title">Local races matter most</div>
+        <div class="wc-text">School boards, county clerks, and city councils make decisions that affect your daily life more directly than federal offices.</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-icon">📊</div>
+        <div class="wc-title">Your vote is statistically significant</div>
+        <div class="wc-text">Local elections are often decided by hundreds — sometimes dozens — of votes. Your vote carries real weight.</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-icon">📋</div>
+        <div class="wc-title">Ballot measures change policy directly</div>
+        <div class="wc-text">Tax levies, bonds, and amendments are decided directly by voters — no politicians in the middle.</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-icon">🗓️</div>
+        <div class="wc-title">Elections happen every year</div>
+        <div class="wc-text">Presidential elections get the attention, but primaries, special elections, and off-cycle races happen constantly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOTING ESSENTIALS -->
+  <div class="essentials-section">
+    <h5 class="section-h5">Get to know your voting essentials</h5>
+    <div class="essentials-grid">
+      <a class="essential-item" href="#">
+        <span class="ei-icon">📍</span>
+        <span class="ei-text">Find your polling place</span>
+      </a>
+      <a class="essential-item" href="#">
+        <span class="ei-icon">🗓️</span>
+        <span class="ei-text">Registration deadlines</span>
+      </a>
+      <a class="essential-item" href="#">
+        <span class="ei-icon">📬</span>
+        <span class="ei-text">Vote by mail options</span>
+      </a>
+      <a class="essential-item" href="#">
+        <span class="ei-icon">🪪</span>
+        <span class="ei-text">Voter ID requirements</span>
+      </a>
+      <a class="essential-item" href="#">
+        <span class="ei-icon">⏰</span>
+        <span class="ei-text">Polling hours</span>
+      </a>
+      <a class="essential-item" href="#">
+        <span class="ei-icon">♿</span>
+        <span class="ei-text">Accessibility services</span>
+      </a>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
+</file>
+
+<file path="index.html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BallotGuide — Find Your Ballot</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    #page-landing {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100vh; padding: 60px 24px;
+      position: relative; overflow: hidden;
+    }
+    #page-landing::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 100%, #f0f0f0 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .landing-eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gray-500); margin-bottom: 24px;
+    }
+    .landing-title {
+      font-family: var(--serif); font-size: clamp(52px, 7vw, 88px);
+      line-height: 1.0; letter-spacing: -2px;
+      text-align: center; max-width: 760px;
+      color: var(--black); margin-bottom: 24px;
+    }
+    .landing-title em { font-style: italic; color: var(--gray-500); }
+    .landing-sub {
+      font-size: 17px; font-weight: 300; color: var(--gray-500);
+      text-align: center; max-width: 440px;
+      line-height: 1.6; margin-bottom: 56px;
+    }
+    .input-group {
+      display: flex; flex-direction: column; gap: 12px;
+      width: 100%; max-width: 440px; position: relative; z-index: 1;
+    }
+    .input-row { display: flex; gap: 10px; }
+    .zip-input {
+      flex: 1; padding: 16px 20px;
+      border: 1.5px solid var(--gray-300); border-radius: 14px;
+      font-family: var(--sans); font-size: 16px; font-weight: 400;
+      color: var(--black); outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .zip-input::placeholder { color: var(--gray-300); }
+    .zip-input:focus {
+      border-color: var(--black);
+      box-shadow: 0 0 0 4px rgba(0,0,0,0.06);
+    }
+    .or-divider {
+      display: flex; align-items: center; gap: 16px;
+      color: var(--gray-300); font-size: 13px;
+    }
+    .or-divider::before, .or-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--gray-200);
+    }
+    .trust-row {
+      display: flex; gap: 24px; margin-top: 64px; opacity: 0.4;
+      font-size: 12px; font-weight: 500; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--gray-500);
+      align-items: center; flex-wrap: wrap; justify-content: center;
+      position: relative; z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">BallotGuide</a>
+  <div class="nav-links">
+    <a href="elections.html">Elections</a>
+    <a href="candidate.html">Candidates</a>
+    <a href="compare.html">Compare</a>
+  </div>
+  <a class="nav-cta" href="elections.html">Find My Ballot</a>
+</nav>
+
+<div id="page-landing">
+  <p class="landing-eyebrow fade-up">Your civic guide</p>
+  <h1 class="landing-title fade-up delay-1">Know exactly<br/><em>what you're voting on.</em></h1>
+  <p class="landing-sub fade-up delay-2">
+    See only the races, districts, and candidates that actually apply to your address — nothing else.
+  </p>
+
+  <div class="input-group fade-up delay-3">
+    <div class="input-row">
+      <input class="zip-input" id="zip-input" type="text" placeholder="Enter ZIP code or address…" maxlength="60" />
+      <button class="btn-primary" id="search-btn">See My Ballot →</button>
+    </div>
+    <div class="or-divider">or</div>
+    <button class="btn-ghost" id="location-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="10" r="3"/>
+        <path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 0 1 8-8z"/>
+      </svg>
+      Use my current location
+    </button>
+    <div id="error-box"></div>
+  </div>
+
+  <div class="trust-row fade-up delay-4">
+    <span>Google Civic API</span>
+    <span>·</span>
+    <span>Ballotpedia</span>
+    <span>·</span>
+    <span>OpenStates</span>
+    <span>·</span>
+    <span>VoteSmart</span>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+  const searchBtn   = document.getElementById('search-btn');
+  const locationBtn = document.getElementById('location-btn');
+  const zipInput    = document.getElementById('zip-input');
+  const errorBox    = document.getElementById('error-box');
+
+  function goToElections(address) {
+    if (!address || address.trim().length < 3) {
+      errorBox.innerHTML = '<div class="error-message">Please enter a valid ZIP code or address.</div>';
+      return;
+    }
+    AppState.address = address.trim();
+    AppState.zip = address.trim();
+    saveState();
+    window.location.href = 'elections.html';
+  }
+
+  searchBtn.addEventListener('click', () => goToElections(zipInput.value));
+
+  zipInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') goToElections(zipInput.value);
+  });
+
+  locationBtn.addEventListener('click', async () => {
+    locationBtn.textContent = 'Getting location…';
+    locationBtn.disabled = true;
+    try {
+      const { lat, lng } = await getLocation();
+      const address = await reverseGeocode(lat, lng);
+      if (address) {
+        goToElections(address);
+      } else {
+        // fallback — just go with coords
+        goToElections(`${lat},${lng}`);
+      }
+    } catch (err) {
+      errorBox.innerHTML = '<div class="error-message">Could not get location. Please enter your address manually.</div>';
+      locationBtn.textContent = 'Use my current location';
+      locationBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
+</file>
+
+<file path="js/main.js">
+// ── Carousel ──────────────────────────────────────
+function scrollCarousel(dir) {
+  const track = document.getElementById('carousel');
+  if (track) track.scrollBy({ left: dir * 200, behavior: 'smooth' });
+}
+
+function setActiveChip(el) {
+  document.querySelectorAll('.district-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── ZIP input: Enter key ──────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const zip = document.getElementById('zip-input');
+  if (zip) {
+    zip.addEventListener('keydown', e => {
+      if (e.key === 'Enter') window.location.href = 'elections.html';
+    });
+  }
+
+  // Re-trigger fade-up animations on page load
+  document.querySelectorAll('.fade-up').forEach(el => {
+    el.style.animation = 'none';
+    void el.offsetHeight;
+    el.style.animation = '';
+  });
+});
+</file>
+
+<file path="README.md">
+# ballotguide.github.io
+Official voting resources and candidate information.
+</file>
+
+</files>
