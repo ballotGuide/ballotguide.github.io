@@ -1,0 +1,65 @@
+{
+  "_meta": {
+    "last_updated": "2026-04-13",
+    "update_frequency": "weekly",
+    "sources": ["Ballotpedia", "Cook Political Report", "Brookings", "Wikipedia", "NCSL"],
+    "note": "Update this file weekly. Max 5 cards. Each card should represent a structural shift, not a news headline."
+  },
+  "signals": [
+    {
+      "id": "house-control-2026",
+      "title": "House control is three seats away",
+      "context": "Democrats need a net gain of just 3 seats to flip the House. Republicans hold a 220–215 majority — the thinnest margin in decades.",
+      "status": "upcoming",
+      "scope": "U.S. House · All 435 Seats",
+      "date_label": "Nov 3, 2026",
+      "source": "Ballotpedia",
+      "source_url": "https://ballotpedia.org/United_States_House_of_Representatives_elections,_2026",
+      "active": true
+    },
+    {
+      "id": "senate-battlegrounds-2026",
+      "title": "12 Senate seats are in play",
+      "context": "Ballotpedia identifies 12 battleground Senate seats this cycle. Republicans are defending one seat in a state Harris won — Maine.",
+      "status": "upcoming",
+      "scope": "U.S. Senate · 35 Seats Up",
+      "date_label": "Nov 3, 2026",
+      "source": "Ballotpedia",
+      "source_url": "https://ballotpedia.org/United_States_Congress_elections,_2026",
+      "active": true
+    },
+    {
+      "id": "governor-flips-2025",
+      "title": "Democrats flipped two governorships",
+      "context": "Spanberger in Virginia and Sherrill in New Jersey both won by wider-than-expected margins, signaling early headwinds for Republicans.",
+      "status": "recent",
+      "scope": "Governors · State Power",
+      "date_label": "Nov 2025",
+      "source": "Wikipedia",
+      "source_url": "https://en.wikipedia.org/wiki/2026_United_States_elections",
+      "active": true
+    },
+    {
+      "id": "record-retirements-2026",
+      "title": "A record wave of retirements",
+      "context": "Over 56 sitting members of Congress — more than 10% — are not running for reelection. 25 are Republicans, often a leading indicator of a coming wave.",
+      "status": "recent",
+      "scope": "Congress · Open Seats",
+      "date_label": "Early 2026",
+      "source": "NPR / Ballotpedia",
+      "source_url": "https://ballotpedia.org/United_States_House_of_Representatives_elections,_2026",
+      "active": true
+    },
+    {
+      "id": "redistricting-mid-cycle",
+      "title": "Congressional maps are being redrawn mid-cycle",
+      "context": "Texas, North Carolina, Missouri, and Ohio have redrawn district maps between elections — a rare move that could affect dozens of competitive races.",
+      "status": "live",
+      "scope": "Redistricting · 4 States",
+      "date_label": "Ongoing",
+      "source": "NCSL / Cook Political Report",
+      "source_url": "https://www.ncsl.org/redistricting",
+      "active": true
+    }
+  ]
+}

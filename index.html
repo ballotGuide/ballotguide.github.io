@@ -82,55 +82,51 @@
     }
     .error-message {
       font-size: 13px; color: #c44; padding: 10px 14px;
-      background: #fff0f0; border-radius: 10px;
-      border: 1px solid #f5c6c6;
+      background: #fff0f0; border-radius: 10px; border: 1px solid #f5c6c6;
     }
     .btn-ghost:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* ── HAPPENING NOW SECTION ── */
+    /* ── HAPPENING NOW ── */
     #happening-now {
       padding: 80px 64px;
       border-top: 1px solid var(--gray-100);
       background: var(--white);
       overflow: hidden;
     }
-
     .hn-header {
       display: flex; align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 40px;
+      justify-content: space-between; margin-bottom: 40px;
     }
-    .hn-header-left {}
     .hn-eyebrow {
       font-size: 11px; font-weight: 500; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--gray-400);
-      margin-bottom: 10px;
+      text-transform: uppercase; color: var(--gray-400); margin-bottom: 10px;
     }
     .hn-title {
       font-family: var(--serif); font-size: 36px;
-      letter-spacing: -1px; color: var(--black);
-      line-height: 1; margin-bottom: 8px;
+      letter-spacing: -1px; color: var(--black); line-height: 1; margin-bottom: 8px;
     }
-    .hn-subtitle {
-      font-size: 14px; color: var(--gray-500);
-      font-weight: 300; line-height: 1.5;
-    }
-    .hn-nav {
-      display: flex; gap: 8px; flex-shrink: 0;
-    }
+    .hn-subtitle { font-size: 14px; color: var(--gray-500); font-weight: 300; }
+    .hn-nav { display: flex; gap: 8px; flex-shrink: 0; }
     .hn-nav-btn {
       width: 40px; height: 40px; border-radius: 50%;
       border: 1.5px solid var(--gray-200); background: var(--white);
       cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: all var(--transition); flex-shrink: 0;
+      transition: all var(--transition);
     }
     .hn-nav-btn:hover { border-color: var(--black); background: var(--black); }
     .hn-nav-btn:hover svg path { stroke: var(--white); }
     .hn-nav-btn svg { width: 14px; height: 14px; pointer-events: none; }
     .hn-nav-btn svg path { stroke: var(--gray-500); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* ── CAROUSEL TRACK ── */
-    .hn-track-wrap { overflow: hidden; position: relative; }
+    /* ── META ROW ── */
+    .hn-meta-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 28px; font-size: 11px; color: var(--gray-400);
+    }
+    .hn-updated { font-weight: 500; }
+
+    /* ── TRACK ── */
+    .hn-track-wrap { overflow: hidden; }
     .hn-track {
       display: flex; gap: 20px;
       transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -139,16 +135,13 @@
 
     /* ── SIGNAL CARD ── */
     .signal-card {
-      flex-shrink: 0;
-      width: 320px;
+      flex-shrink: 0; width: 320px;
       padding: 32px 30px 28px;
-      border: 1.5px solid var(--gray-100);
-      border-radius: 20px;
+      border: 1.5px solid var(--gray-100); border-radius: 20px;
       cursor: pointer;
       transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
       background: var(--white);
       display: flex; flex-direction: column; gap: 14px;
-      position: relative;
     }
     .signal-card:hover {
       border-color: var(--black);
@@ -156,78 +149,40 @@
       transform: translateY(-3px);
     }
     .signal-card:hover .sc-cta { opacity: 1; }
-
-    .sc-top {
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    .sc-top { display: flex; align-items: center; justify-content: space-between; }
     .sc-status {
       display: inline-flex; align-items: center; gap: 5px;
       padding: 4px 10px; border-radius: 100px;
       font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
     }
-    .sc-status.live {
-      background: #0a0a0a; color: #fff;
-    }
+    .sc-status.live { background: #0a0a0a; color: #fff; }
     .sc-status.live::before {
-      content: '';
-      width: 6px; height: 6px; border-radius: 50%;
-      background: #fff;
-      animation: pulse 1.5s ease-in-out infinite;
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: #fff; animation: pulse 1.5s ease-in-out infinite;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
-    }
-    .sc-status.upcoming {
-      background: var(--gray-100); color: var(--gray-600);
-    }
-    .sc-status.recent {
-      background: var(--gray-50); color: var(--gray-500);
-      border: 1px solid var(--gray-200);
-    }
-    .sc-date {
-      font-size: 11px; color: var(--gray-400); font-weight: 500;
-    }
-
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .sc-status.upcoming { background: var(--gray-100); color: var(--gray-600); }
+    .sc-status.recent { background: var(--gray-50); color: var(--gray-500); border: 1px solid var(--gray-200); }
+    .sc-date { font-size: 11px; color: var(--gray-400); font-weight: 500; }
     .sc-title {
       font-family: var(--serif); font-size: 21px;
-      letter-spacing: -0.5px; color: var(--black);
-      line-height: 1.15;
+      letter-spacing: -0.5px; color: var(--black); line-height: 1.15;
     }
-    .sc-context {
-      font-size: 13px; color: var(--gray-500);
-      line-height: 1.55; font-weight: 300;
-    }
-
+    .sc-context { font-size: 13px; color: var(--gray-500); line-height: 1.55; font-weight: 300; }
     .sc-footer {
       display: flex; align-items: center; justify-content: space-between;
-      padding-top: 8px; border-top: 1px solid var(--gray-100);
-      margin-top: auto;
+      padding-top: 8px; border-top: 1px solid var(--gray-100); margin-top: auto;
     }
-    .sc-scope {
-      font-size: 11px; font-weight: 500; letter-spacing: 1px;
-      text-transform: uppercase; color: var(--gray-400);
-    }
-    .sc-cta {
-      font-size: 12px; color: var(--gray-400);
-      opacity: 0; transition: opacity var(--transition);
-    }
-    .sc-link {
-      font-size: 12px; color: var(--gray-500);
-      text-decoration: none; transition: color var(--transition);
-    }
-    .signal-card:hover .sc-link { color: var(--black); }
+    .sc-scope { font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-400); }
+    .sc-source { font-size: 11px; color: var(--gray-300); }
+    .sc-cta { font-size: 12px; color: var(--gray-400); opacity: 0; transition: opacity var(--transition); }
 
-    /* ── PROGRESS DOTS ── */
-    .hn-dots {
-      display: flex; gap: 6px; justify-content: center;
-      margin-top: 28px;
-    }
+    /* ── DOTS ── */
+    .hn-dots { display: flex; gap: 6px; justify-content: center; margin-top: 28px; }
     .hn-dot {
       width: 6px; height: 6px; border-radius: 50%;
-      background: var(--gray-200);
+      background: var(--gray-200); cursor: pointer;
       transition: background var(--transition), transform var(--transition);
-      cursor: pointer; border: none; padding: 0; appearance: none;
     }
     .hn-dot.active { background: var(--black); transform: scale(1.3); }
 
@@ -257,7 +212,6 @@
   <p class="landing-sub fade-up delay-2">
     See only the races, districts, and candidates that actually apply to your address — nothing else.
   </p>
-
   <div class="input-group fade-up delay-3">
     <div class="input-row">
       <input class="zip-input" id="zip-input" type="text" placeholder="Enter ZIP code or address…" maxlength="60" />
@@ -273,17 +227,12 @@
     </button>
     <div id="error-box"></div>
   </div>
-
   <div class="trust-row fade-up delay-4">
-    <span>Google Civic API</span>
-    <span>·</span>
-    <span>Ballotpedia</span>
-    <span>·</span>
-    <span>OpenStates</span>
-    <span>·</span>
+    <span>Google Civic API</span><span>·</span>
+    <span>Ballotpedia</span><span>·</span>
+    <span>OpenStates</span><span>·</span>
     <span>VoteSmart</span>
   </div>
-
   <div class="scroll-hint">
     <span>Scroll</span>
     <svg viewBox="0 0 14 14" fill="none"><path d="M2 4l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -293,10 +242,10 @@
 <!-- ── HAPPENING NOW ── -->
 <section id="happening-now">
   <div class="hn-header">
-    <div class="hn-header-left">
+    <div>
       <p class="hn-eyebrow">United States · 2026</p>
       <h2 class="hn-title">Happening Now</h2>
-      <p class="hn-subtitle">Live political headlines from U.S. publishers, linked to the original reporting.</p>
+      <p class="hn-subtitle">Key shifts shaping elections across the U.S.</p>
     </div>
     <div class="hn-nav">
       <button class="hn-nav-btn" id="hn-prev" aria-label="Previous">
@@ -308,26 +257,28 @@
     </div>
   </div>
 
+  <!-- Last updated row — filled by JS -->
+  <div class="hn-meta-row" id="hn-meta"></div>
+
   <div class="hn-track-wrap">
     <div class="hn-track" id="hn-track">
-      <!-- Cards are injected from the news API -->
+      <!-- Cards injected by JS from data/signals.json -->
     </div>
   </div>
-
   <div class="hn-dots" id="hn-dots"></div>
 </section>
 
 <script src="js/main.js"></script>
 <script>
-  /* ── ZIP / Location logic ── */
+  /* ── ZIP / Location ── */
   const searchBtn   = document.getElementById('search-btn');
   const locationBtn = document.getElementById('location-btn');
   const zipInput    = document.getElementById('zip-input');
   const errorBox    = document.getElementById('error-box');
 
   function focusZip() {
-    zipInput.focus();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => zipInput.focus(), 400);
   }
 
   function goToElections(address) {
@@ -360,248 +311,113 @@
     }
   });
 
-  /* ── News API config ── */
-  window.BALLOTGUIDE_GNEWS_API_KEY = 'YOUR_API_KEY_HERE';
-  const GNEWS_API_KEY = window.BALLOTGUIDE_GNEWS_API_KEY;
-  const GNEWS_ENDPOINT =
-    'https://gnews.io/api/v4/search?q=' +
-    encodeURIComponent('(politics OR election OR congress OR senate OR supreme court)') +
-    '&lang=en&country=us&max=5&apikey=' + encodeURIComponent(GNEWS_API_KEY);
+  /* ── Happening Now: load from signals.json ── */
+  (async function() {
+    const track    = document.getElementById('hn-track');
+    const dotsWrap = document.getElementById('hn-dots');
+    const metaRow  = document.getElementById('hn-meta');
 
-  const FALLBACK_HEADLINES = [
-    {
-      title: 'House control is three seats away',
-      description: 'A narrow House margin keeps control of the chamber within reach heading into 2026.',
-      publishedAt: '2026-04-01T12:00:00Z',
-      source: { name: 'BallotGuide fallback' },
-      url: '#'
-    },
-    {
-      title: 'Governors races are shaping the next cycle',
-      description: 'Recent statewide results are already influencing how both parties map the 2026 battlefield.',
-      publishedAt: '2026-03-28T12:00:00Z',
-      source: { name: 'BallotGuide fallback' },
-      url: '#'
-    },
-    {
-      title: 'Congressional retirements are opening new races',
-      description: 'Open seats create volatility and can quickly change the balance of a cycle.',
-      publishedAt: '2026-03-22T12:00:00Z',
-      source: { name: 'BallotGuide fallback' },
-      url: '#'
-    },
-    {
-      title: 'Court fights over maps remain politically important',
-      description: 'Redistricting disputes continue to shape where competitive races emerge.',
-      publishedAt: '2026-03-18T12:00:00Z',
-      source: { name: 'BallotGuide fallback' },
-      url: '#'
-    },
-    {
-      title: 'National politics is moving through the states',
-      description: 'Battleground decisions in a few states are setting the tone for the broader map.',
-      publishedAt: '2026-03-12T12:00:00Z',
-      source: { name: 'BallotGuide fallback' },
-      url: '#'
-    }
-  ];
+    // Load data
+    let signals = [];
+    try {
+      const res  = await fetch('data/signals.json');
+      const data = await res.json();
+      signals = data.signals.filter(s => s.active !== false);
 
-  function focusZip() {
-    zipInput.focus();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function formatHeadlineDate(value) {
-    if (!value) return 'Latest';
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return 'Latest';
-    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-  }
-
-  function stripTrailingSource(title = '') {
-    return title.replace(/\s*[-|–—]\s*[^-|–—]{2,60}$/, '').trim();
-  }
-
-  function buildNewsCard(article) {
-    const href = article.url && article.url !== '#' ? article.url : '#';
-    const safeTitle = stripTrailingSource(article.title || 'Political headline');
-    const safeDescription = (article.description || 'Open the original article for the latest reporting.').trim();
-    const sourceName = article.source?.name || 'Source';
-    const publishedLabel = formatHeadlineDate(article.publishedAt);
-    const isFallback = href === '#';
-
-    return `
-      <article class="signal-card"${isFallback ? ' onclick="focusZip()"' : ''}>
-        <div class="sc-top">
-          <span class="sc-status live">Headline</span>
-          <span class="sc-date">${publishedLabel}</span>
-        </div>
-        <div class="sc-title">${safeTitle}</div>
-        <div class="sc-context">${safeDescription}</div>
-        <div class="sc-footer">
-          <span class="sc-scope">${sourceName}</span>
-          ${isFallback
-            ? '<span class="sc-cta" style="opacity:1">Add API key →</span>'
-            : `<a class="sc-link" href="${href}" target="_blank" rel="noopener noreferrer">Read source ↗</a>`}
-        </div>
-      </article>
-    `;
-  }
-
-  async function loadPoliticalHeadlines() {
-    const track = document.getElementById('hn-track');
-    const subtitle = document.querySelector('.hn-subtitle');
-
-    const useFallback = (reasonText) => {
-      track.innerHTML = FALLBACK_HEADLINES.map(buildNewsCard).join('');
-      if (subtitle && reasonText) subtitle.textContent = reasonText;
-      initHeadlineCarousel();
-    };
-
-    if (!GNEWS_API_KEY || GNEWS_API_KEY === 'PASTE_GNEWS_API_KEY_HERE') {
-      useFallback('Add a free GNews API key to show live political headlines from U.S. publishers.');
+      // Show last updated
+      if (data._meta && data._meta.last_updated) {
+        const d = new Date(data._meta.last_updated);
+        const formatted = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        metaRow.innerHTML = `
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--gray-300);display:inline-block;"></span>
+          <span class="hn-updated">Last updated ${formatted}</span>
+          <span style="color:var(--gray-200)">·</span>
+          <span>Curated from Ballotpedia, Cook Political Report, Brookings</span>
+        `;
+      }
+    } catch(e) {
+      console.warn('Could not load signals.json', e);
       return;
     }
 
-    try {
-      const response = await fetch(GNEWS_ENDPOINT);
-      if (!response.ok) throw new Error('Request failed with status ' + response.status);
+    // Status label map
+    const statusLabels = { live: 'Live', upcoming: 'Upcoming', recent: 'Recent' };
 
-      const payload = await response.json();
-      const articles = Array.isArray(payload.articles) ? payload.articles.slice(0, 5) : [];
+    // Build cards
+    signals.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'signal-card';
+      card.onclick = focusZip;
+      card.innerHTML = `
+        <div class="sc-top">
+          <span class="sc-status ${s.status}">${statusLabels[s.status] || s.status}</span>
+          <span class="sc-date">${s.date_label}</span>
+        </div>
+        <div class="sc-title">${s.title}</div>
+        <div class="sc-context">${s.context}</div>
+        <div class="sc-footer">
+          <span class="sc-scope">${s.scope}</span>
+          <span class="sc-cta">Enter your ZIP →</span>
+        </div>
+      `;
+      track.appendChild(card);
+    });
 
-      if (!articles.length) {
-        useFallback('No live headlines came back, so the carousel is showing a fallback set right now.');
-        return;
-      }
+    // Carousel logic
+    const cards    = Array.from(track.querySelectorAll('.signal-card'));
+    const total    = cards.length;
+    let current    = 0;
+    let autoTimer  = null;
 
-      track.innerHTML = articles.map(buildNewsCard).join('');
-      initHeadlineCarousel();
-    } catch (error) {
-      console.error('Could not load GNews headlines:', error);
-      useFallback('The live headline feed is unavailable right now, so this section is showing a fallback set.');
-    }
-  }
-
-  function initHeadlineCarousel() {
-    const track = document.getElementById('hn-track');
-    const dotsWrap = document.getElementById('hn-dots');
-    const prevBtn = document.getElementById('hn-prev');
-    const nextBtn = document.getElementById('hn-next');
-    const cards = Array.from(track.querySelectorAll('.signal-card'));
-
-    dotsWrap.innerHTML = '';
-
-    if (!cards.length) return;
-
-    const cardWidth = () => {
-      const gap = parseFloat(getComputedStyle(track).gap || '20');
-      return cards[0].offsetWidth + gap;
+    const CARD_W = () => {
+      const card = cards[0];
+      const gap  = 20;
+      return card.offsetWidth + gap;
     };
 
-    const visibleCards = () => Math.max(1, Math.floor(track.parentElement.offsetWidth / cardWidth()));
-    const maxIndex = () => Math.max(0, cards.length - visibleCards());
+    const VISIBLE = () => Math.max(1, Math.floor(track.parentElement.offsetWidth / CARD_W()));
 
-    let current = 0;
-    let autoTimer = null;
-
+    // Build dots
     cards.forEach((_, i) => {
-      const dot = document.createElement('button');
-      dot.type = 'button';
-      dot.className = 'hn-dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', 'Go to headline ' + (i + 1));
-      dot.addEventListener('click', () => {
-        stopAuto();
-        goTo(i);
-        startAuto();
-      });
-      dotsWrap.appendChild(dot);
+      const d = document.createElement('div');
+      d.className = 'hn-dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => { resetAuto(); goTo(i); });
+      dotsWrap.appendChild(d);
     });
 
     function updateDots() {
-      dotsWrap.querySelectorAll('.hn-dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === current);
+      dotsWrap.querySelectorAll('.hn-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
       });
     }
 
     function goTo(index) {
-      current = Math.max(0, Math.min(index, maxIndex()));
-      track.style.transform = `translateX(-${current * cardWidth()}px)`;
+      const maxIndex = Math.max(0, total - VISIBLE());
+      current = Math.max(0, Math.min(index, maxIndex));
+      track.style.transform = `translateX(-${current * CARD_W()}px)`;
       updateDots();
     }
 
-    function startAuto() {
-      stopAuto();
-      autoTimer = setInterval(() => {
-        const limit = maxIndex();
-        current = current >= limit ? 0 : current + 1;
-        goTo(current);
-      }, 5000);
+    document.getElementById('hn-prev').addEventListener('click', () => {
+      resetAuto();
+      goTo(current <= 0 ? total - 1 : current - 1);
+    });
+    document.getElementById('hn-next').addEventListener('click', () => {
+      resetAuto();
+      goTo(current >= total - 1 ? 0 : current + 1);
+    });
+
+    function resetAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => goTo(current >= total - 1 ? 0 : current + 1), 5000);
     }
 
-    function stopAuto() {
-      if (autoTimer) clearInterval(autoTimer);
-    }
+    track.addEventListener('mouseenter', () => clearInterval(autoTimer));
+    track.addEventListener('mouseleave', resetAuto);
 
-    prevBtn.onclick = () => {
-      stopAuto();
-      const limit = maxIndex();
-      goTo(current <= 0 ? limit : current - 1);
-      startAuto();
-    };
-
-    nextBtn.onclick = () => {
-      stopAuto();
-      const limit = maxIndex();
-      goTo(current >= limit ? 0 : current + 1);
-      startAuto();
-    };
-
-    track.addEventListener('mouseenter', stopAuto);
-    track.addEventListener('mouseleave', startAuto);
+    resetAuto();
     window.addEventListener('resize', () => goTo(current));
-
-    startAuto();
-    goTo(0);
-  }
-
-  /* ── ZIP / Location logic ── */
-  const searchBtn   = document.getElementById('search-btn');
-  const locationBtn = document.getElementById('location-btn');
-  const zipInput    = document.getElementById('zip-input');
-  const errorBox    = document.getElementById('error-box');
-
-  function goToElections(address) {
-    if (!address || address.trim().length < 3) {
-      errorBox.innerHTML = '<div class="error-message">Please enter a valid ZIP code or address.</div>';
-      return;
-    }
-    errorBox.innerHTML = '';
-    AppState.address = address.trim();
-    AppState.zip     = address.trim();
-    saveState();
-    window.location.href = 'elections.html';
-  }
-
-  searchBtn.addEventListener('click', () => goToElections(zipInput.value));
-  zipInput.addEventListener('keydown', e => { if (e.key === 'Enter') goToElections(zipInput.value); });
-
-  locationBtn.addEventListener('click', async () => {
-    locationBtn.innerHTML = '⏳ Getting location…';
-    locationBtn.disabled  = true;
-    errorBox.innerHTML    = '';
-    try {
-      const { lat, lng } = await getLocation();
-      const address      = await reverseGeocode(lat, lng);
-      goToElections(address || `${lat.toFixed(4)}, ${lng.toFixed(4)}`);
-    } catch {
-      errorBox.innerHTML = '<div class="error-message">Could not get location. Please enter your address manually.</div>';
-      locationBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg> Use my current location`;
-      locationBtn.disabled = false;
-    }
-  });
-
-  loadPoliticalHeadlines();
+  })();
 </script>
 </body>
 </html>
