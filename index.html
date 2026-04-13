@@ -1,423 +1,789 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BallotGuide — Find Your Ballot</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <style>
-    /* ── LANDING HERO ── */
-    #page-landing {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      min-height: 100vh; padding: 80px 24px 64px;
-      position: relative; overflow: hidden;
-    }
-    #page-landing::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 100%, #f0f0f0 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .landing-eyebrow {
-      font-size: 12px; font-weight: 500; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--gray-500);
-      margin-bottom: 24px; text-align: center;
-    }
-    .landing-title {
-      font-family: var(--serif); font-size: clamp(52px, 7vw, 88px);
-      line-height: 1.0; letter-spacing: -2px;
-      text-align: center; max-width: 760px;
-      color: var(--black); margin-bottom: 24px;
-    }
-    .landing-title em { font-style: italic; color: var(--gray-500); }
-    .landing-sub {
-      font-size: 17px; font-weight: 300; color: var(--gray-500);
-      text-align: center; max-width: 440px;
-      line-height: 1.6; margin-bottom: 56px;
-    }
-    .input-group {
-      display: flex; flex-direction: column; gap: 12px;
-      width: 100%; max-width: 440px; position: relative; z-index: 1;
-    }
-    .input-row { display: flex; gap: 10px; }
-    .zip-input {
-      flex: 1; padding: 16px 20px;
-      border: 1.5px solid var(--gray-300); border-radius: 14px;
-      font-family: var(--sans); font-size: 16px;
-      color: var(--black); outline: none; background: var(--white);
-      transition: border-color var(--transition), box-shadow var(--transition);
-    }
-    .zip-input::placeholder { color: var(--gray-300); }
-    .zip-input:focus {
-      border-color: var(--black);
-      box-shadow: 0 0 0 4px rgba(0,0,0,0.06);
-    }
-    .or-divider {
-      display: flex; align-items: center; gap: 16px;
-      color: var(--gray-300); font-size: 13px;
-    }
-    .or-divider::before, .or-divider::after {
-      content: ''; flex: 1; height: 1px; background: var(--gray-200);
-    }
-    .trust-row {
-      display: flex; gap: 24px; margin-top: 64px; opacity: 0.4;
-      font-size: 12px; font-weight: 500; letter-spacing: 1px;
-      text-transform: uppercase; color: var(--gray-500);
-      align-items: center; flex-wrap: wrap; justify-content: center;
-      position: relative; z-index: 1;
-    }
-    .scroll-hint {
-      position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
-      color: var(--gray-400); opacity: 0.6; z-index: 1;
-      animation: hintBob 2s ease-in-out infinite;
-    }
-    .scroll-hint svg { width: 14px; height: 14px; }
-    @keyframes hintBob {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50%       { transform: translateX(-50%) translateY(5px); }
-    }
-    .error-message {
-      font-size: 13px; color: #c44; padding: 10px 14px;
-      background: #fff0f0; border-radius: 10px; border: 1px solid #f5c6c6;
-    }
-    .btn-ghost:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    /* ── HAPPENING NOW ── */
-    #happening-now {
-      padding: 80px 64px;
-      border-top: 1px solid var(--gray-100);
-      background: var(--white);
-      overflow: hidden;
-    }
-    .hn-header {
-      display: flex; align-items: flex-end;
-      justify-content: space-between; margin-bottom: 40px;
-    }
-    .hn-eyebrow {
-      font-size: 11px; font-weight: 500; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--gray-400); margin-bottom: 10px;
-    }
-    .hn-title {
-      font-family: var(--serif); font-size: 36px;
-      letter-spacing: -1px; color: var(--black); line-height: 1; margin-bottom: 8px;
-    }
-    .hn-subtitle { font-size: 14px; color: var(--gray-500); font-weight: 300; }
-    .hn-nav { display: flex; gap: 8px; flex-shrink: 0; }
-    .hn-nav-btn {
-      width: 40px; height: 40px; border-radius: 50%;
-      border: 1.5px solid var(--gray-200); background: var(--white);
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: all var(--transition);
-    }
-    .hn-nav-btn:hover { border-color: var(--black); background: var(--black); }
-    .hn-nav-btn:hover svg path { stroke: var(--white); }
-    .hn-nav-btn svg { width: 14px; height: 14px; pointer-events: none; }
-    .hn-nav-btn svg path { stroke: var(--gray-500); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-
-    /* ── META ROW ── */
-    .hn-meta-row {
-      display: flex; align-items: center; gap: 8px;
-      margin-bottom: 28px; font-size: 11px; color: var(--gray-400);
-    }
-    .hn-updated { font-weight: 500; }
-
-    /* ── TRACK ── */
-    .hn-track-wrap { overflow: hidden; }
-    .hn-track {
-      display: flex; gap: 20px;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      will-change: transform;
-    }
-
-    /* ── SIGNAL CARD ── */
-    .signal-card {
-      flex-shrink: 0; width: 320px;
-      padding: 32px 30px 28px;
-      border: 1.5px solid var(--gray-100); border-radius: 20px;
-      cursor: pointer;
-      transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
-      background: var(--white);
-      display: flex; flex-direction: column; gap: 14px;
-    }
-    .signal-card:hover {
-      border-color: var(--black);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.09);
-      transform: translateY(-3px);
-    }
-    .signal-card:hover .sc-cta { opacity: 1; }
-    .sc-top { display: flex; align-items: center; justify-content: space-between; }
-    .sc-status {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 4px 10px; border-radius: 100px;
-      font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
-    }
-    .sc-status.live { background: #0a0a0a; color: #fff; }
-    .sc-status.live::before {
-      content: ''; width: 6px; height: 6px; border-radius: 50%;
-      background: #fff; animation: pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    .sc-status.upcoming { background: var(--gray-100); color: var(--gray-600); }
-    .sc-status.recent { background: var(--gray-50); color: var(--gray-500); border: 1px solid var(--gray-200); }
-    .sc-date { font-size: 11px; color: var(--gray-400); font-weight: 500; }
-    .sc-title {
-      font-family: var(--serif); font-size: 21px;
-      letter-spacing: -0.5px; color: var(--black); line-height: 1.15;
-    }
-    .sc-context { font-size: 13px; color: var(--gray-500); line-height: 1.55; font-weight: 300; }
-    .sc-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-top: 8px; border-top: 1px solid var(--gray-100); margin-top: auto;
-    }
-    .sc-scope { font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-400); }
-    .sc-source { font-size: 11px; color: var(--gray-300); }
-    .sc-cta { font-size: 12px; color: var(--gray-400); opacity: 0; transition: opacity var(--transition); }
-
-    /* ── DOTS ── */
-    .hn-dots { display: flex; gap: 6px; justify-content: center; margin-top: 28px; }
-    .hn-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--gray-200); cursor: pointer;
-      transition: background var(--transition), transform var(--transition);
-    }
-    .hn-dot.active { background: var(--black); transform: scale(1.3); }
-
-    @media (max-width: 768px) {
-      #happening-now { padding: 56px 24px; }
-      .hn-header { flex-direction: column; align-items: flex-start; gap: 20px; }
-      .signal-card { width: 280px; }
-    }
-  </style>
-</head>
-<body>
-
-<nav>
-  <a class="nav-logo" href="index.html">BallotGuide</a>
-  <div class="nav-links">
-    <a href="elections.html">Elections</a>
-    <a href="candidate.html">Candidates</a>
-    <a href="compare.html">Compare</a>
-  </div>
-  <a class="nav-cta" href="elections.html">Find My Ballot</a>
-</nav>
-
-<!-- ── HERO ── -->
-<div id="page-landing">
-  <p class="landing-eyebrow fade-up">Your civic guide</p>
-  <h1 class="landing-title fade-up delay-1">Know exactly<br/><em>what you're voting on.</em></h1>
-  <p class="landing-sub fade-up delay-2">
-    See only the races, districts, and candidates that actually apply to your address — nothing else.
-  </p>
-  <div class="input-group fade-up delay-3">
-    <div class="input-row">
-      <input class="zip-input" id="zip-input" type="text" placeholder="Enter ZIP code or address…" maxlength="60" />
-      <button class="btn-primary" id="search-btn">See My Ballot →</button>
-    </div>
-    <div class="or-divider">or</div>
-    <button class="btn-ghost" id="location-btn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="10" r="3"/>
-        <path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 0 1 8-8z"/>
-      </svg>
-      Use my current location
-    </button>
-    <div id="error-box"></div>
-  </div>
-  <div class="trust-row fade-up delay-4">
-    <span>Google Civic API</span><span>·</span>
-    <span>Ballotpedia</span><span>·</span>
-    <span>OpenStates</span><span>·</span>
-    <span>VoteSmart</span>
-  </div>
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <svg viewBox="0 0 14 14" fill="none"><path d="M2 4l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </div>
-</div>
-
-<!-- ── HAPPENING NOW ── -->
-<section id="happening-now">
-  <div class="hn-header">
-    <div>
-      <p class="hn-eyebrow">United States · 2026</p>
-      <h2 class="hn-title">Happening Now</h2>
-      <p class="hn-subtitle">Key shifts shaping elections across the U.S.</p>
-    </div>
-    <div class="hn-nav">
-      <button class="hn-nav-btn" id="hn-prev" aria-label="Previous">
-        <svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg>
-      </button>
-      <button class="hn-nav-btn" id="hn-next" aria-label="Next">
-        <svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- Last updated row — filled by JS -->
-  <div class="hn-meta-row" id="hn-meta"></div>
-
-  <div class="hn-track-wrap">
-    <div class="hn-track" id="hn-track">
-      <!-- Cards injected by JS from data/signals.json -->
-    </div>
-  </div>
-  <div class="hn-dots" id="hn-dots"></div>
-</section>
-
-<script src="js/main.js"></script>
-<script>
-  /* ── ZIP / Location ── */
-  const searchBtn   = document.getElementById('search-btn');
-  const locationBtn = document.getElementById('location-btn');
-  const zipInput    = document.getElementById('zip-input');
-  const errorBox    = document.getElementById('error-box');
-
-  function focusZip() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setTimeout(() => zipInput.focus(), 400);
-  }
-
-  function goToElections(address) {
-    if (!address || address.trim().length < 3) {
-      errorBox.innerHTML = '<div class="error-message">Please enter a valid ZIP code or address.</div>';
-      return;
-    }
-    errorBox.innerHTML = '';
-    AppState.address = address.trim();
-    AppState.zip     = address.trim();
-    saveState();
-    window.location.href = 'elections.html';
-  }
-
-  searchBtn.addEventListener('click', () => goToElections(zipInput.value));
-  zipInput.addEventListener('keydown', e => { if (e.key === 'Enter') goToElections(zipInput.value); });
-
-  locationBtn.addEventListener('click', async () => {
-    locationBtn.innerHTML = '⏳ Getting location…';
-    locationBtn.disabled  = true;
-    errorBox.innerHTML    = '';
-    try {
-      const { lat, lng } = await getLocation();
-      const address      = await reverseGeocode(lat, lng);
-      goToElections(address || `${lat.toFixed(4)}, ${lng.toFixed(4)}`);
-    } catch {
-      errorBox.innerHTML = '<div class="error-message">Could not get location. Please enter your address manually.</div>';
-      locationBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg> Use my current location`;
-      locationBtn.disabled = false;
-    }
-  });
-
-  /* ── Happening Now: load from signals.json ── */
-  (async function() {
-    const track    = document.getElementById('hn-track');
-    const dotsWrap = document.getElementById('hn-dots');
-    const metaRow  = document.getElementById('hn-meta');
-
-    // Load data
-    let signals = [];
-    try {
-      const res  = await fetch('data/signals.json');
-      const data = await res.json();
-      signals = data.signals.filter(s => s.active !== false);
-
-      // Show last updated
-      if (data._meta && data._meta.last_updated) {
-        const d = new Date(data._meta.last_updated);
-        const formatted = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        metaRow.innerHTML = `
-          <span style="width:6px;height:6px;border-radius:50%;background:var(--gray-300);display:inline-block;"></span>
-          <span class="hn-updated">Last updated ${formatted}</span>
-          <span style="color:var(--gray-200)">·</span>
-          <span>Curated from Ballotpedia, Cook Political Report, Brookings</span>
-        `;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BallotGuide — Find Your Ballot</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      /* ── BASE ── */
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
       }
-    } catch(e) {
-      console.warn('Could not load signals.json', e);
-      return;
-    }
 
-    // Status label map
-    const statusLabels = { live: 'Live', upcoming: 'Upcoming', recent: 'Recent' };
+      /* ════════════════════════════════════════
+       SECTION 1 — HAPPENING NOW
+    ════════════════════════════════════════ */
+      #happening-now {
+        padding: 120px 72px 64px;
+        background: var(--white);
+        overflow: hidden;
+        border-bottom: 1px solid var(--gray-100);
+      }
 
-    // Build cards
-    signals.forEach(s => {
-      const card = document.createElement('div');
-      card.className = 'signal-card';
-      card.onclick = focusZip;
-      card.innerHTML = `
-        <div class="sc-top">
-          <span class="sc-status ${s.status}">${statusLabels[s.status] || s.status}</span>
-          <span class="sc-date">${s.date_label}</span>
+      /* Kicker / eyebrow */
+      .hn-kicker {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+      .hn-kicker-line {
+        width: 32px;
+        height: 1px;
+        background: var(--black);
+      }
+      .hn-kicker-text {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--black);
+      }
+
+      /* Section header row */
+      .hn-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+      .hn-title {
+        font-family: var(--serif);
+        font-size: clamp(40px, 5vw, 64px);
+        letter-spacing: -2px;
+        color: var(--black);
+        line-height: 0.95;
+      }
+      .hn-subtitle {
+        font-size: 14px;
+        color: var(--gray-400);
+        font-weight: 300;
+        letter-spacing: 0.2px;
+        margin-bottom: 32px;
+        margin-top: 10px;
+      }
+
+      /* Nav buttons */
+      .hn-nav {
+        display: flex;
+        gap: 6px;
+        align-self: flex-end;
+        padding-bottom: 4px;
+      }
+      .hn-nav-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid var(--gray-200);
+        background: var(--white);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--transition);
+      }
+      .hn-nav-btn:hover {
+        border-color: var(--black);
+        background: var(--black);
+      }
+      .hn-nav-btn:hover svg path {
+        stroke: var(--white);
+      }
+      .hn-nav-btn svg {
+        width: 12px;
+        height: 12px;
+        pointer-events: none;
+      }
+      .hn-nav-btn svg path {
+        stroke: var(--gray-400);
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* Meta / timestamp */
+      .hn-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+      .hn-meta-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--gray-300);
+        flex-shrink: 0;
+      }
+      .hn-meta-text {
+        font-size: 11px;
+        color: var(--gray-400);
+        letter-spacing: 0.3px;
+      }
+      .hn-meta-text strong {
+        font-weight: 600;
+        color: var(--gray-500);
+      }
+
+      /* Track */
+      .hn-track-wrap {
+        overflow: hidden;
+      }
+      .hn-track {
+        display: flex;
+        gap: 14px;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
+      }
+
+      /* ── Signal Card ── */
+      .signal-card {
+        flex-shrink: 0;
+        width: 290px;
+        padding: 0;
+        border: 1px solid var(--gray-100);
+        border-radius: 14px;
+        cursor: pointer;
+        transition:
+          border-color var(--transition),
+          box-shadow var(--transition),
+          transform var(--transition);
+        background: var(--white);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .signal-card:hover {
+        border-color: var(--gray-300);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+        transform: translateY(-2px);
+      }
+      .signal-card:hover .sc-cta {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      /* Top color band */
+      .sc-band {
+        height: 3px;
+        width: 100%;
+        flex-shrink: 0;
+      }
+      .sc-band.live {
+        background: var(--black);
+      }
+      .sc-band.upcoming {
+        background: var(--gray-300);
+      }
+      .sc-band.recent {
+        background: var(--gray-200);
+      }
+
+      /* Card body */
+      .sc-body {
+        padding: 22px 22px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+      }
+
+      .sc-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .sc-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+      .sc-status.live {
+        color: var(--black);
+      }
+      .sc-status.upcoming {
+        color: var(--gray-400);
+      }
+      .sc-status.recent {
+        color: var(--gray-400);
+      }
+      .sc-status.live::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--black);
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.25;
+        }
+      }
+
+      .sc-date {
+        font-size: 11px;
+        color: var(--gray-300);
+        font-weight: 400;
+      }
+
+      .sc-title {
+        font-family: var(--serif);
+        font-size: 19px;
+        letter-spacing: -0.4px;
+        color: var(--black);
+        line-height: 1.2;
+      }
+      .sc-context {
+        font-size: 12.5px;
+        color: var(--gray-500);
+        line-height: 1.6;
+        font-weight: 300;
+        flex: 1;
+      }
+
+      /* Card footer */
+      .sc-footer {
+        padding: 12px 22px 16px;
+        border-top: 1px solid var(--gray-100);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .sc-scope {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--gray-400);
+      }
+      .sc-cta {
+        font-size: 11px;
+        color: var(--black);
+        font-weight: 500;
+        opacity: 0;
+        transform: translateX(-4px);
+        transition:
+          opacity var(--transition),
+          transform var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .sc-cta::after {
+        content: "→";
+      }
+
+      /* Progress dots */
+      .hn-dots {
+        display: flex;
+        gap: 5px;
+        margin-top: 20px;
+      }
+      .hn-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--gray-200);
+        cursor: pointer;
+        transition:
+          background var(--transition),
+          transform var(--transition),
+          width var(--transition);
+      }
+      .hn-dot.active {
+        background: var(--black);
+        width: 18px;
+        border-radius: 3px;
+      }
+
+      /* ════════════════════════════════════════
+       SECTION 2 — HERO
+    ════════════════════════════════════════ */
+      #page-hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        padding: 96px 24px 80px;
+        background: var(--white);
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Subtle grid texture */
+      #page-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--gray-100) 1px, transparent 1px),
+          linear-gradient(90deg, var(--gray-100) 1px, transparent 1px);
+        background-size: 48px 48px;
+        opacity: 0.4;
+        pointer-events: none;
+      }
+      /* Fade grid out toward center */
+      #page-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 70% 80% at 50% 50%,
+          var(--white) 30%,
+          transparent 100%
+        );
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+      .hero-eyebrow-line {
+        width: 24px;
+        height: 1px;
+        background: var(--gray-300);
+      }
+      .hero-eyebrow-text {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--gray-400);
+      }
+
+      .hero-title {
+        font-family: var(--serif);
+        font-size: clamp(48px, 6vw, 80px);
+        line-height: 1;
+        letter-spacing: -2.5px;
+        text-align: center;
+        max-width: 720px;
+        color: var(--black);
+        margin-bottom: 22px;
+      }
+      .hero-title em {
+        font-style: italic;
+        color: var(--gray-300);
+      }
+
+      .hero-sub {
+        font-size: 15px;
+        font-weight: 300;
+        color: var(--gray-500);
+        text-align: center;
+        max-width: 380px;
+        line-height: 1.65;
+        margin-bottom: 48px;
+      }
+
+      /* Input */
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        max-width: 420px;
+      }
+      .input-row {
+        display: flex;
+        gap: 8px;
+      }
+      .zip-input {
+        flex: 1;
+        padding: 15px 18px;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        font-family: var(--sans);
+        font-size: 15px;
+        color: var(--black);
+        outline: none;
+        background: var(--white);
+        transition:
+          border-color var(--transition),
+          box-shadow var(--transition);
+      }
+      .zip-input::placeholder {
+        color: var(--gray-300);
+      }
+      .zip-input:focus {
+        border-color: var(--black);
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+      }
+      .or-divider {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: var(--gray-300);
+        font-size: 12px;
+      }
+      .or-divider::before,
+      .or-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--gray-100);
+      }
+
+      /* Trust badges */
+      .trust-row {
+        display: flex;
+        gap: 6px;
+        margin-top: 40px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .trust-badge {
+        padding: 5px 12px;
+        border: 1px solid var(--gray-100);
+        border-radius: 100px;
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--gray-400);
+      }
+
+      .error-message {
+        font-size: 13px;
+        color: #c44;
+        padding: 10px 14px;
+        background: #fff0f0;
+        border-radius: 10px;
+        border: 1px solid #f5c6c6;
+      }
+      .btn-ghost:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 768px) {
+        #happening-now {
+          padding: 88px 20px 48px;
+        }
+        .hn-title {
+          font-size: 36px;
+        }
+        .hn-head {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+        .hn-nav {
+          align-self: auto;
+        }
+        .signal-card {
+          width: 260px;
+        }
+        #page-hero {
+          padding: 64px 20px 64px;
+        }
+        .hero-title {
+          font-size: 40px;
+          letter-spacing: -1.5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a class="nav-logo" href="index.html">BallotGuide</a>
+      <div class="nav-links">
+        <a href="elections.html">Elections</a>
+        <a href="candidate.html">Candidates</a>
+        <a href="compare.html">Compare</a>
+      </div>
+      <a class="nav-cta" href="elections.html">Find My Ballot</a>
+    </nav>
+
+    <!-- ════════════════════════════════════════
+     SECTION 1 — HAPPENING NOW
+════════════════════════════════════════ -->
+    <section id="happening-now">
+      <div class="hn-kicker">
+        <span class="hn-kicker-line"></span>
+        <span class="hn-kicker-text">United States · 2026</span>
+      </div>
+
+      <div class="hn-head">
+        <h2 class="hn-title">Happening Now</h2>
+        <div class="hn-nav">
+          <button class="hn-nav-btn" id="hn-prev" aria-label="Previous">
+            <svg viewBox="0 0 12 12"><path d="M8 1L3 6l5 5" /></svg>
+          </button>
+          <button class="hn-nav-btn" id="hn-next" aria-label="Next">
+            <svg viewBox="0 0 12 12"><path d="M4 1l5 5-5 5" /></svg>
+          </button>
         </div>
-        <div class="sc-title">${s.title}</div>
-        <div class="sc-context">${s.context}</div>
+      </div>
+
+      <p class="hn-subtitle">Key shifts shaping elections across the U.S.</p>
+
+      <div class="hn-meta" id="hn-meta"></div>
+
+      <div class="hn-track-wrap">
+        <div class="hn-track" id="hn-track"></div>
+      </div>
+      <div class="hn-dots" id="hn-dots"></div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+     SECTION 2 — HERO
+════════════════════════════════════════ -->
+    <section id="page-hero">
+      <div class="hero-inner">
+        <div class="hero-eyebrow fade-up">
+          <span class="hero-eyebrow-line"></span>
+          <span class="hero-eyebrow-text">Your civic guide</span>
+          <span class="hero-eyebrow-line"></span>
+        </div>
+
+        <h1 class="hero-title fade-up delay-1">
+          Know exactly<br /><em>what you're voting on.</em>
+        </h1>
+
+        <p class="hero-sub fade-up delay-2">
+          Enter your address and see only the races, candidates, and measures on
+          your actual ballot — nothing else.
+        </p>
+
+        <div class="input-group fade-up delay-3">
+          <div class="input-row">
+            <input
+              class="zip-input"
+              id="zip-input"
+              type="text"
+              placeholder="Enter ZIP code or address…"
+              maxlength="60"
+            />
+            <button class="btn-primary" id="search-btn">See My Ballot →</button>
+          </div>
+          <div class="or-divider">or</div>
+          <button class="btn-ghost" id="location-btn">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="10" r="3" />
+              <path
+                d="M12 2a8 8 0 0 1 8 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 0 1 8-8z"
+              />
+            </svg>
+            Use my current location
+          </button>
+          <div id="error-box"></div>
+        </div>
+
+        <div class="trust-row fade-up delay-4">
+          <span class="trust-badge">Google Civic API</span>
+          <span class="trust-badge">Ballotpedia</span>
+          <span class="trust-badge">OpenStates</span>
+          <span class="trust-badge">VoteSmart</span>
+        </div>
+      </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script>
+      /* ── ZIP / Location ── */
+      const searchBtn = document.getElementById("search-btn");
+      const locationBtn = document.getElementById("location-btn");
+      const zipInput = document.getElementById("zip-input");
+      const errorBox = document.getElementById("error-box");
+
+      function focusZip() {
+        document
+          .getElementById("page-hero")
+          .scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => zipInput.focus(), 400);
+      }
+
+      function goToElections(address) {
+        if (!address || address.trim().length < 3) {
+          errorBox.innerHTML =
+            '<div class="error-message">Please enter a valid ZIP code or address.</div>';
+          return;
+        }
+        errorBox.innerHTML = "";
+        AppState.address = address.trim();
+        AppState.zip = address.trim();
+        saveState();
+        window.location.href = "elections.html";
+      }
+
+      searchBtn.addEventListener("click", () => goToElections(zipInput.value));
+      zipInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") goToElections(zipInput.value);
+      });
+
+      locationBtn.addEventListener("click", async () => {
+        locationBtn.innerHTML = "⏳ Getting location…";
+        locationBtn.disabled = true;
+        errorBox.innerHTML = "";
+        try {
+          const { lat, lng } = await getLocation();
+          const address = await reverseGeocode(lat, lng);
+          goToElections(address || `${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+        } catch {
+          errorBox.innerHTML =
+            '<div class="error-message">Could not get location. Please enter your address manually.</div>';
+          locationBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg> Use my current location`;
+          locationBtn.disabled = false;
+        }
+      });
+
+      /* ── Carousel ── */
+      (async function () {
+        const track = document.getElementById("hn-track");
+        const dotsWrap = document.getElementById("hn-dots");
+        const metaEl = document.getElementById("hn-meta");
+
+        let signals = [];
+        try {
+          const res = await fetch("data/signals.json");
+          const data = await res.json();
+          signals = data.signals.filter((s) => s.active !== false);
+
+          if (data._meta?.last_updated) {
+            const formatted = new Date(
+              data._meta.last_updated,
+            ).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            });
+            metaEl.innerHTML = `
+          <div class="hn-meta-dot"></div>
+          <span class="hn-meta-text">
+            <strong>Updated ${formatted}</strong>
+            &nbsp;·&nbsp; Curated from Ballotpedia, Cook Political Report, Brookings
+          </span>
+        `;
+          }
+        } catch (e) {
+          console.warn("Could not load signals.json", e);
+          return;
+        }
+
+        const statusLabels = {
+          live: "Live",
+          upcoming: "Upcoming",
+          recent: "Recent",
+        };
+
+        signals.forEach((s) => {
+          const card = document.createElement("div");
+          card.className = "signal-card";
+          card.onclick = focusZip;
+          card.innerHTML = `
+        <div class="sc-band ${s.status}"></div>
+        <div class="sc-body">
+          <div class="sc-top">
+            <span class="sc-status ${s.status}">${statusLabels[s.status] || s.status}</span>
+            <span class="sc-date">${s.date_label}</span>
+          </div>
+          <div class="sc-title">${s.title}</div>
+          <div class="sc-context">${s.context}</div>
+        </div>
         <div class="sc-footer">
           <span class="sc-scope">${s.scope}</span>
-          <span class="sc-cta">Enter your ZIP →</span>
+          <span class="sc-cta">Find your ballot</span>
         </div>
       `;
-      track.appendChild(card);
-    });
+          track.appendChild(card);
+        });
 
-    // Carousel logic
-    const cards    = Array.from(track.querySelectorAll('.signal-card'));
-    const total    = cards.length;
-    let current    = 0;
-    let autoTimer  = null;
+        const cards = Array.from(track.querySelectorAll(".signal-card"));
+        const total = cards.length;
+        let current = 0;
+        let autoTimer = null;
+        if (!total) return;
 
-    const CARD_W = () => {
-      const card = cards[0];
-      const gap  = 20;
-      return card.offsetWidth + gap;
-    };
+        const CARD_W = () => cards[0].offsetWidth + 14;
+        const VISIBLE = () =>
+          Math.max(1, Math.floor(track.parentElement.offsetWidth / CARD_W()));
 
-    const VISIBLE = () => Math.max(1, Math.floor(track.parentElement.offsetWidth / CARD_W()));
+        cards.forEach((_, i) => {
+          const d = document.createElement("div");
+          d.className = "hn-dot" + (i === 0 ? " active" : "");
+          d.addEventListener("click", () => {
+            resetAuto();
+            goTo(i);
+          });
+          dotsWrap.appendChild(d);
+        });
 
-    // Build dots
-    cards.forEach((_, i) => {
-      const d = document.createElement('div');
-      d.className = 'hn-dot' + (i === 0 ? ' active' : '');
-      d.addEventListener('click', () => { resetAuto(); goTo(i); });
-      dotsWrap.appendChild(d);
-    });
+        function updateDots() {
+          dotsWrap
+            .querySelectorAll(".hn-dot")
+            .forEach((d, i) => d.classList.toggle("active", i === current));
+        }
 
-    function updateDots() {
-      dotsWrap.querySelectorAll('.hn-dot').forEach((d, i) => {
-        d.classList.toggle('active', i === current);
-      });
-    }
+        function goTo(index) {
+          const max = Math.max(0, total - VISIBLE());
+          current = Math.max(0, Math.min(index, max));
+          track.style.transform = `translateX(-${current * CARD_W()}px)`;
+          updateDots();
+        }
 
-    function goTo(index) {
-      const maxIndex = Math.max(0, total - VISIBLE());
-      current = Math.max(0, Math.min(index, maxIndex));
-      track.style.transform = `translateX(-${current * CARD_W()}px)`;
-      updateDots();
-    }
+        document.getElementById("hn-prev").addEventListener("click", () => {
+          resetAuto();
+          goTo(current <= 0 ? Math.max(0, total - VISIBLE()) : current - 1);
+        });
+        document.getElementById("hn-next").addEventListener("click", () => {
+          resetAuto();
+          goTo(current >= Math.max(0, total - VISIBLE()) ? 0 : current + 1);
+        });
 
-    document.getElementById('hn-prev').addEventListener('click', () => {
-      resetAuto();
-      goTo(current <= 0 ? total - 1 : current - 1);
-    });
-    document.getElementById('hn-next').addEventListener('click', () => {
-      resetAuto();
-      goTo(current >= total - 1 ? 0 : current + 1);
-    });
+        function resetAuto() {
+          clearInterval(autoTimer);
+          autoTimer = setInterval(() => {
+            const max = Math.max(0, total - VISIBLE());
+            goTo(current >= max ? 0 : current + 1);
+          }, 5000);
+        }
 
-    function resetAuto() {
-      clearInterval(autoTimer);
-      autoTimer = setInterval(() => goTo(current >= total - 1 ? 0 : current + 1), 5000);
-    }
-
-    track.addEventListener('mouseenter', () => clearInterval(autoTimer));
-    track.addEventListener('mouseleave', resetAuto);
-
-    resetAuto();
-    window.addEventListener('resize', () => goTo(current));
-  })();
-</script>
-</body>
+        track.addEventListener("mouseenter", () => clearInterval(autoTimer));
+        track.addEventListener("mouseleave", resetAuto);
+        window.addEventListener("resize", () => goTo(current));
+        resetAuto();
+      })();
+    </script>
+  </body>
 </html>
