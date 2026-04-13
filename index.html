@@ -212,6 +212,11 @@
       font-size: 12px; color: var(--gray-400);
       opacity: 0; transition: opacity var(--transition);
     }
+    .sc-link {
+      font-size: 12px; color: var(--gray-500);
+      text-decoration: none; transition: color var(--transition);
+    }
+    .signal-card:hover .sc-link { color: var(--black); }
 
     /* ── PROGRESS DOTS ── */
     .hn-dots {
@@ -222,7 +227,7 @@
       width: 6px; height: 6px; border-radius: 50%;
       background: var(--gray-200);
       transition: background var(--transition), transform var(--transition);
-      cursor: pointer;
+      cursor: pointer; border: none; padding: 0; appearance: none;
     }
     .hn-dot.active { background: var(--black); transform: scale(1.3); }
 
@@ -291,7 +296,7 @@
     <div class="hn-header-left">
       <p class="hn-eyebrow">United States · 2026</p>
       <h2 class="hn-title">Happening Now</h2>
-      <p class="hn-subtitle">Key shifts shaping elections across the U.S.</p>
+      <p class="hn-subtitle">Live political headlines from U.S. publishers, linked to the original reporting.</p>
     </div>
     <div class="hn-nav">
       <button class="hn-nav-btn" id="hn-prev" aria-label="Previous">
@@ -305,77 +310,7 @@
 
   <div class="hn-track-wrap">
     <div class="hn-track" id="hn-track">
-
-      <!-- Card 1 -->
-      <div class="signal-card" onclick="focusZip()">
-        <div class="sc-top">
-          <span class="sc-status upcoming">Upcoming</span>
-          <span class="sc-date">Nov 3, 2026</span>
-        </div>
-        <div class="sc-title">House control is three seats away</div>
-        <div class="sc-context">Democrats need a net gain of just 3 seats to flip the House. Republicans currently hold a 220–215 majority — the thinnest margin in decades.</div>
-        <div class="sc-footer">
-          <span class="sc-scope">U.S. House · All 435 Seats</span>
-          <span class="sc-cta">Enter your ZIP →</span>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="signal-card" onclick="focusZip()">
-        <div class="sc-top">
-          <span class="sc-status upcoming">Upcoming</span>
-          <span class="sc-date">Nov 3, 2026</span>
-        </div>
-        <div class="sc-title">12 Senate seats are in play</div>
-        <div class="sc-context">Ballotpedia identifies 12 battleground Senate seats this cycle. Republicans are defending one seat in a state Kamala Harris won — Maine.</div>
-        <div class="sc-footer">
-          <span class="sc-scope">U.S. Senate · 35 Seats Up</span>
-          <span class="sc-cta">Enter your ZIP →</span>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="signal-card" onclick="focusZip()">
-        <div class="sc-top">
-          <span class="sc-status recent">Recent</span>
-          <span class="sc-date">Nov 2025</span>
-        </div>
-        <div class="sc-title">Democrats flipped two governorships</div>
-        <div class="sc-context">Abigail Spanberger in Virginia and Mikie Sherrill in New Jersey both won by wider-than-expected margins, signaling early headwinds for Republicans.</div>
-        <div class="sc-footer">
-          <span class="sc-scope">Governors · State Power</span>
-          <span class="sc-cta">Enter your ZIP →</span>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="signal-card" onclick="focusZip()">
-        <div class="sc-top">
-          <span class="sc-status recent">Recent</span>
-          <span class="sc-date">Early 2026</span>
-        </div>
-        <div class="sc-title">A record wave of retirements</div>
-        <div class="sc-context">Over 56 sitting members of Congress — more than 10% — are not running for reelection. 25 of them are Republicans, often a leading indicator of a coming wave.</div>
-        <div class="sc-footer">
-          <span class="sc-scope">Congress · Open Seats</span>
-          <span class="sc-cta">Enter your ZIP →</span>
-        </div>
-      </div>
-
-      <!-- Card 5 -->
-      <div class="signal-card" onclick="focusZip()">
-        <div class="sc-top">
-          <span class="sc-status live">Live</span>
-          <span class="sc-date">Ongoing</span>
-        </div>
-        <div class="sc-title">Congressional maps are being redrawn mid-cycle</div>
-        <div class="sc-context">Texas, North Carolina, Missouri, and Ohio have redrawn district maps between elections — a rare move that could affect dozens of competitive races.</div>
-        <div class="sc-footer">
-          <span class="sc-scope">Redistricting · 4 States</span>
-          <span class="sc-cta">Enter your ZIP →</span>
-        </div>
-      </div>
-
+      <!-- Cards are injected from the news API -->
     </div>
   </div>
 
@@ -425,63 +360,248 @@
     }
   });
 
-  /* ── Happening Now Carousel ── */
-  (function() {
-    const track    = document.getElementById('hn-track');
+  /* ── News API config ── */
+  window.BALLOTGUIDE_GNEWS_API_KEY = window.BALLOTGUIDE_GNEWS_API_KEY || 'PASTE_GNEWS_API_KEY_HERE';
+  const GNEWS_API_KEY = window.BALLOTGUIDE_GNEWS_API_KEY;
+  const GNEWS_ENDPOINT =
+    'https://gnews.io/api/v4/search?q=' +
+    encodeURIComponent('(politics OR election OR congress OR senate OR supreme court)') +
+    '&lang=en&country=us&max=5&apikey=' + encodeURIComponent(GNEWS_API_KEY);
+
+  const FALLBACK_HEADLINES = [
+    {
+      title: 'House control is three seats away',
+      description: 'A narrow House margin keeps control of the chamber within reach heading into 2026.',
+      publishedAt: '2026-04-01T12:00:00Z',
+      source: { name: 'BallotGuide fallback' },
+      url: '#'
+    },
+    {
+      title: 'Governors races are shaping the next cycle',
+      description: 'Recent statewide results are already influencing how both parties map the 2026 battlefield.',
+      publishedAt: '2026-03-28T12:00:00Z',
+      source: { name: 'BallotGuide fallback' },
+      url: '#'
+    },
+    {
+      title: 'Congressional retirements are opening new races',
+      description: 'Open seats create volatility and can quickly change the balance of a cycle.',
+      publishedAt: '2026-03-22T12:00:00Z',
+      source: { name: 'BallotGuide fallback' },
+      url: '#'
+    },
+    {
+      title: 'Court fights over maps remain politically important',
+      description: 'Redistricting disputes continue to shape where competitive races emerge.',
+      publishedAt: '2026-03-18T12:00:00Z',
+      source: { name: 'BallotGuide fallback' },
+      url: '#'
+    },
+    {
+      title: 'National politics is moving through the states',
+      description: 'Battleground decisions in a few states are setting the tone for the broader map.',
+      publishedAt: '2026-03-12T12:00:00Z',
+      source: { name: 'BallotGuide fallback' },
+      url: '#'
+    }
+  ];
+
+  function focusZip() {
+    zipInput.focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function formatHeadlineDate(value) {
+    if (!value) return 'Latest';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Latest';
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function stripTrailingSource(title = '') {
+    return title.replace(/\s*[-|–—]\s*[^-|–—]{2,60}$/, '').trim();
+  }
+
+  function buildNewsCard(article) {
+    const href = article.url && article.url !== '#' ? article.url : '#';
+    const safeTitle = stripTrailingSource(article.title || 'Political headline');
+    const safeDescription = (article.description || 'Open the original article for the latest reporting.').trim();
+    const sourceName = article.source?.name || 'Source';
+    const publishedLabel = formatHeadlineDate(article.publishedAt);
+    const isFallback = href === '#';
+
+    return `
+      <article class="signal-card"${isFallback ? ' onclick="focusZip()"' : ''}>
+        <div class="sc-top">
+          <span class="sc-status live">Headline</span>
+          <span class="sc-date">${publishedLabel}</span>
+        </div>
+        <div class="sc-title">${safeTitle}</div>
+        <div class="sc-context">${safeDescription}</div>
+        <div class="sc-footer">
+          <span class="sc-scope">${sourceName}</span>
+          ${isFallback
+            ? '<span class="sc-cta" style="opacity:1">Add API key →</span>'
+            : `<a class="sc-link" href="${href}" target="_blank" rel="noopener noreferrer">Read source ↗</a>`}
+        </div>
+      </article>
+    `;
+  }
+
+  async function loadPoliticalHeadlines() {
+    const track = document.getElementById('hn-track');
+    const subtitle = document.querySelector('.hn-subtitle');
+
+    const useFallback = (reasonText) => {
+      track.innerHTML = FALLBACK_HEADLINES.map(buildNewsCard).join('');
+      if (subtitle && reasonText) subtitle.textContent = reasonText;
+      initHeadlineCarousel();
+    };
+
+    if (!GNEWS_API_KEY || GNEWS_API_KEY === 'PASTE_GNEWS_API_KEY_HERE') {
+      useFallback('Add a free GNews API key to show live political headlines from U.S. publishers.');
+      return;
+    }
+
+    try {
+      const response = await fetch(GNEWS_ENDPOINT);
+      if (!response.ok) throw new Error('Request failed with status ' + response.status);
+
+      const payload = await response.json();
+      const articles = Array.isArray(payload.articles) ? payload.articles.slice(0, 5) : [];
+
+      if (!articles.length) {
+        useFallback('No live headlines came back, so the carousel is showing a fallback set right now.');
+        return;
+      }
+
+      track.innerHTML = articles.map(buildNewsCard).join('');
+      initHeadlineCarousel();
+    } catch (error) {
+      console.error('Could not load GNews headlines:', error);
+      useFallback('The live headline feed is unavailable right now, so this section is showing a fallback set.');
+    }
+  }
+
+  function initHeadlineCarousel() {
+    const track = document.getElementById('hn-track');
     const dotsWrap = document.getElementById('hn-dots');
-    const cards    = Array.from(track.querySelectorAll('.signal-card'));
-    const CARD_W   = () => cards[0].offsetWidth + 20; // card + gap
-    const VISIBLE  = () => Math.floor(track.parentElement.offsetWidth / CARD_W());
+    const prevBtn = document.getElementById('hn-prev');
+    const nextBtn = document.getElementById('hn-next');
+    const cards = Array.from(track.querySelectorAll('.signal-card'));
 
-    let current    = 0;
-    let autoTimer  = null;
-    const total    = cards.length;
+    dotsWrap.innerHTML = '';
 
-    // Build dots
+    if (!cards.length) return;
+
+    const cardWidth = () => {
+      const gap = parseFloat(getComputedStyle(track).gap || '20');
+      return cards[0].offsetWidth + gap;
+    };
+
+    const visibleCards = () => Math.max(1, Math.floor(track.parentElement.offsetWidth / cardWidth()));
+    const maxIndex = () => Math.max(0, cards.length - visibleCards());
+
+    let current = 0;
+    let autoTimer = null;
+
     cards.forEach((_, i) => {
-      const d = document.createElement('div');
-      d.className = 'hn-dot' + (i === 0 ? ' active' : '');
-      d.addEventListener('click', () => goTo(i));
-      dotsWrap.appendChild(d);
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'hn-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Go to headline ' + (i + 1));
+      dot.addEventListener('click', () => {
+        stopAuto();
+        goTo(i);
+        startAuto();
+      });
+      dotsWrap.appendChild(dot);
     });
 
     function updateDots() {
-      dotsWrap.querySelectorAll('.hn-dot').forEach((d, i) => {
-        d.classList.toggle('active', i === current);
+      dotsWrap.querySelectorAll('.hn-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === current);
       });
     }
 
     function goTo(index) {
-      const max = total - VISIBLE();
-      current = Math.max(0, Math.min(index, Math.max(max, 0)));
-      track.style.transform = `translateX(-${current * CARD_W()}px)`;
+      current = Math.max(0, Math.min(index, maxIndex()));
+      track.style.transform = `translateX(-${current * cardWidth()}px)`;
       updateDots();
     }
 
-    document.getElementById('hn-prev').addEventListener('click', () => {
-      resetAuto();
-      goTo(current <= 0 ? total - 1 : current - 1);
-    });
-
-    document.getElementById('hn-next').addEventListener('click', () => {
-      resetAuto();
-      goTo(current >= total - 1 ? 0 : current + 1);
-    });
-
-    function resetAuto() {
-      clearInterval(autoTimer);
+    function startAuto() {
+      stopAuto();
       autoTimer = setInterval(() => {
-        goTo(current >= total - 1 ? 0 : current + 1);
+        const limit = maxIndex();
+        current = current >= limit ? 0 : current + 1;
+        goTo(current);
       }, 5000);
     }
 
-    // Pause on hover
-    track.addEventListener('mouseenter', () => clearInterval(autoTimer));
-    track.addEventListener('mouseleave', resetAuto);
+    function stopAuto() {
+      if (autoTimer) clearInterval(autoTimer);
+    }
 
-    resetAuto();
+    prevBtn.onclick = () => {
+      stopAuto();
+      const limit = maxIndex();
+      goTo(current <= 0 ? limit : current - 1);
+      startAuto();
+    };
+
+    nextBtn.onclick = () => {
+      stopAuto();
+      const limit = maxIndex();
+      goTo(current >= limit ? 0 : current + 1);
+      startAuto();
+    };
+
+    track.addEventListener('mouseenter', stopAuto);
+    track.addEventListener('mouseleave', startAuto);
     window.addEventListener('resize', () => goTo(current));
-  })();
+
+    startAuto();
+    goTo(0);
+  }
+
+  /* ── ZIP / Location logic ── */
+  const searchBtn   = document.getElementById('search-btn');
+  const locationBtn = document.getElementById('location-btn');
+  const zipInput    = document.getElementById('zip-input');
+  const errorBox    = document.getElementById('error-box');
+
+  function goToElections(address) {
+    if (!address || address.trim().length < 3) {
+      errorBox.innerHTML = '<div class="error-message">Please enter a valid ZIP code or address.</div>';
+      return;
+    }
+    errorBox.innerHTML = '';
+    AppState.address = address.trim();
+    AppState.zip     = address.trim();
+    saveState();
+    window.location.href = 'elections.html';
+  }
+
+  searchBtn.addEventListener('click', () => goToElections(zipInput.value));
+  zipInput.addEventListener('keydown', e => { if (e.key === 'Enter') goToElections(zipInput.value); });
+
+  locationBtn.addEventListener('click', async () => {
+    locationBtn.innerHTML = '⏳ Getting location…';
+    locationBtn.disabled  = true;
+    errorBox.innerHTML    = '';
+    try {
+      const { lat, lng } = await getLocation();
+      const address      = await reverseGeocode(lat, lng);
+      goToElections(address || `${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+    } catch {
+      errorBox.innerHTML = '<div class="error-message">Could not get location. Please enter your address manually.</div>';
+      locationBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 0 1 8-8z"/></svg> Use my current location`;
+      locationBtn.disabled = false;
+    }
+  });
+
+  loadPoliticalHeadlines();
 </script>
 </body>
 </html>
